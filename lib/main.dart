@@ -3,6 +3,7 @@ import 'package:auto_start_flutter/auto_start_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:silksong_alarm/set_alarm.dart';
+import 'package:silksong_alarm/silksong_news.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -37,46 +38,82 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(),
       body: const SetAlarm(),
-      drawer: SafeArea(
-        child: Drawer(
-          child: Column(
-            children: [
-              Text(
-                "Settings",
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-              ListTile(
-                leading: const Icon(Icons.run_circle_outlined),
-                title: const Text("Auto Start"),
-                onTap: () async => await getAutoStartPermission(),
-              ),
-              ListTile(
-                leading: const Icon(Icons.rule),
-                title: const Text("Check Alarm Permission"),
-                onTap: () async {
-                  final res = await checkAndroidScheduleExactAlarmPermission();
+      drawer: const Settings(),
+    );
+  }
+}
 
-                  if (context.mounted) {
-                    await showDialog(
-                      context: context,
-                      builder: (context) => AlertDialog(
-                        content: Text(
-                          "Permission is ${res.name}",
-                          style: Theme.of(context).textTheme.titleLarge,
-                        ),
-                        actions: [
-                          TextButton(
-                            child: const Text("ok"),
-                            onPressed: () => Navigator.pop(context),
-                          ),
-                        ],
+class Settings extends StatelessWidget {
+  const Settings({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: Drawer(
+        child: Column(
+          children: [
+            Text(
+              "Settings",
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
+            ListTile(
+              leading: const Icon(Icons.run_circle_outlined),
+              title: const Text("Auto Start"),
+              onTap: () async => await getAutoStartPermission(),
+            ),
+            ListTile(
+              leading: const Icon(Icons.rule),
+              title: const Text("Check Alarm Permission"),
+              onTap: () async {
+                final res = await checkAndroidScheduleExactAlarmPermission();
+
+                if (context.mounted) {
+                  await showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      content: Text(
+                        "Permission is ${res.name}",
+                        style: Theme.of(context).textTheme.titleLarge,
                       ),
-                    );
-                  }
-                },
-              )
-            ],
-          ),
+                      actions: [
+                        TextButton(
+                          child: const Text("ok"),
+                          onPressed: () => Navigator.pop(context),
+                        ),
+                      ],
+                    ),
+                  );
+                }
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.download),
+              title: const Text("Download latest news"),
+              onTap: () async {
+                final res = await SilksongNews.download();
+
+                if (context.mounted) {
+                  await showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      content: Text(
+                        "Downloaded: $res",
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                      actions: [
+                        TextButton(
+                          child: const Text("ok"),
+                          onPressed: () => Navigator.pop(context),
+                        ),
+                      ],
+                    ),
+                  );
+                }
+              },
+            ),
+          ],
         ),
       ),
     );

@@ -2,6 +2,7 @@ import 'package:alarm/alarm.dart';
 import 'package:alarm/model/alarm_settings.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:silksong_alarm/silksong_news.dart';
 
 class SetAlarm extends StatefulWidget {
   const SetAlarm({super.key});
@@ -45,7 +46,10 @@ class _SetAlarmState extends State<SetAlarm> {
                     hour: time.hour,
                     minute: time.minute,
                   ),
-                  assetAudioPath: 'assets/alarm.mp3',
+                  vibrate: true,
+                  androidFullScreenIntent: true,
+                  enableNotificationOnKill: true,
+                  assetAudioPath: await SilksongNews.path,
                   notificationTitle: "SILKSONG NÖEWS?????",
                   notificationBody: "morning copium dose",
                 ),
