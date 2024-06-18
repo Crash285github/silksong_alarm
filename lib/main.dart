@@ -2,6 +2,7 @@ import 'package:alarm/alarm.dart';
 import 'package:auto_start_flutter/auto_start_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:silksong_alarm/set_alarm.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -35,9 +36,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: const Center(
-        child: Text('Hello World!'),
-      ),
+      body: const SetAlarm(),
       drawer: SafeArea(
         child: Drawer(
           child: Column(
