@@ -7,9 +7,12 @@ environment:
   sdk: ">=3.3.3 <4.0.0"
 
 dependencies:
+  alarm: ^3.1.4
+  auto_start_flutter: ^0.1.1
   flutter:
     sdk: flutter
   flutter_launcher_icons: ^0.13.1
+  permission_handler: ^11.3.1
 
 flutter_launcher_icons:
   image_path_android: "assets/app_icon.png"
