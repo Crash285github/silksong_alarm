@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:silksong_alarm/alarm_list.dart';
 import 'package:silksong_alarm/permissions.dart';
 import 'package:silksong_alarm/ring_screen.dart';
+import 'package:silksong_alarm/set_alarm.dart';
 
 import 'settings.dart';
 
@@ -52,9 +53,12 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
-      body: const AlarmList(),
+      appBar: AppBar(
+        title: const Text("Silksong Alarm"),
+      ),
+      body: AlarmList(alarms: alarms),
       drawer: const Settings(),
+      floatingActionButton: const SetAlarmButton(),
     );
   }
 }

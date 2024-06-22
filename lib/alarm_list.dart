@@ -1,10 +1,20 @@
+import 'package:alarm/model/alarm_settings.dart';
 import 'package:flutter/material.dart';
 
 class AlarmList extends StatelessWidget {
-  const AlarmList({super.key});
+  final List<AlarmSettings> alarms;
+
+  const AlarmList({super.key, required this.alarms});
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return ListView.builder(
+      itemCount: alarms.length,
+      itemBuilder: (context, index) => InkWell(
+        child: Card(
+          child: Text(alarms[index].notificationTitle),
+        ),
+      ),
+    );
   }
 }
