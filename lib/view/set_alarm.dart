@@ -1,6 +1,7 @@
 import 'package:alarm/alarm.dart';
 import 'package:alarm/model/alarm_settings.dart';
 import 'package:flutter/material.dart';
+import 'package:silksong_alarm/model/alarm_notifier.dart';
 import 'package:silksong_alarm/services/silksong_news.dart';
 
 class SetAlarmButton extends StatelessWidget {
@@ -52,7 +53,27 @@ class _SetAlarmSheetState extends State<_SetAlarmSheet> {
                   elevation: 10,
                   clipBehavior: Clip.antiAlias,
                   child: InkWell(
-                    onTap: () {},
+                    onTap: () async {
+                      final selected = await showTimePicker(
+                        context: context,
+                        initialTime: TimeOfDay.now(),
+                      );
+
+                      if (selected != null) {
+                        DateTime time = DateTime.now().copyWith(
+                          hour: selected.hour,
+                          minute: selected.minute,
+                        );
+
+                        if (time.isBefore(DateTime.now())) {
+                          time = time.add(const Duration(days: 1));
+                        }
+
+                        setState(() => dateTime = time);
+
+                        AlarmNotifier().notify();
+                      }
+                    },
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Center(
@@ -76,7 +97,7 @@ class _SetAlarmSheetState extends State<_SetAlarmSheet> {
               onTap: () async {
                 await Alarm.set(
                   alarmSettings: AlarmSettings(
-                    id: DateTime.now().millisecondsSinceEpoch,
+                    id: DateTime.now().millisecondsSinceEpoch % 100000,
                     dateTime: dateTime,
                     assetAudioPath: await SilksongNews.path,
                     notificationTitle: "Your Daily Silksong Alarm",
@@ -87,6 +108,8 @@ class _SetAlarmSheetState extends State<_SetAlarmSheet> {
                     volume: 1,
                   ),
                 );
+
+                AlarmNotifier().notify();
               },
               child: Padding(
                 padding: const EdgeInsets.all(8.0),

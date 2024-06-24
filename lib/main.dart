@@ -9,8 +9,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
-  await SilksongNews.init();
-
+  SilksongNews.init();
   await Alarm.init();
 
   runApp(const SilksongAlarmApp());
