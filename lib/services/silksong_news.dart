@@ -9,6 +9,7 @@ class SilksongNews {
   static Future<String> get path async =>
       "${(await getApplicationCacheDirectory()).path}/alarm.mp3 ";
 
+  @pragma('vm:entry-point')
   static Future<bool> download() async {
     try {
       final latest =

@@ -1,4 +1,7 @@
+import 'package:alarm/alarm.dart';
+import 'package:alarm/model/alarm_settings.dart';
 import 'package:flutter/material.dart';
+import 'package:silksong_alarm/services/silksong_news.dart';
 
 class SetAlarmButton extends StatelessWidget {
   const SetAlarmButton({super.key});
@@ -35,6 +38,7 @@ class _SetAlarmSheetState extends State<_SetAlarmSheet> {
   @override
   Widget build(BuildContext context) {
     return DraggableScrollableSheet(
+      initialChildSize: 1,
       builder: (context, scrollController) => Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -69,7 +73,21 @@ class _SetAlarmSheetState extends State<_SetAlarmSheet> {
             elevation: 10,
             clipBehavior: Clip.antiAlias,
             child: InkWell(
-              onTap: () {},
+              onTap: () async {
+                await Alarm.set(
+                  alarmSettings: AlarmSettings(
+                    id: DateTime.now().millisecondsSinceEpoch,
+                    dateTime: dateTime,
+                    assetAudioPath: await SilksongNews.path,
+                    notificationTitle: "Your Daily Silksong Alarm",
+                    notificationBody: "There has been... ???",
+                    androidFullScreenIntent: true,
+                    enableNotificationOnKill: true,
+                    vibrate: true,
+                    volume: 1,
+                  ),
+                );
+              },
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Center(
