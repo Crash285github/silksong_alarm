@@ -3,10 +3,10 @@ import 'dart:async';
 import 'package:alarm/alarm.dart';
 import 'package:alarm/model/alarm_settings.dart';
 import 'package:flutter/material.dart';
-import 'package:silksong_alarm/alarm_list.dart';
-import 'package:silksong_alarm/permissions.dart';
-import 'package:silksong_alarm/ring_screen.dart';
-import 'package:silksong_alarm/set_alarm.dart';
+import 'package:silksong_alarm/view/alarm_list.dart';
+import 'package:silksong_alarm/services/permissions.dart';
+import 'package:silksong_alarm/view/ring_screen.dart';
+import 'package:silksong_alarm/view/set_alarm.dart';
 
 import 'settings.dart';
 

@@ -1,7 +1,7 @@
 import 'package:auto_start_flutter/auto_start_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:silksong_alarm/permissions.dart';
-import 'package:silksong_alarm/silksong_news.dart';
+import 'package:silksong_alarm/services/permissions.dart';
+import 'package:silksong_alarm/services/silksong_news.dart';
 
 class Settings extends StatelessWidget {
   const Settings({
