@@ -108,7 +108,7 @@ class _SetAlarmSheetState extends State<_SetAlarmSheet> {
                     androidFullScreenIntent: true,
                     enableNotificationOnKill: true,
                     vibrate: true,
-                    volume: 0.1,
+                    volume: 1,
                   ),
                 );
 

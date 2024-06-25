@@ -31,7 +31,9 @@ class RingScreen extends StatelessWidget {
                         const Duration(minutes: 5),
                       ),
                     ),
-                  ).whenComplete(() => AlarmNotifier().notify());
+                  ).whenComplete(
+                    () => AlarmNotifier().notify(),
+                  );
 
                   Navigator.pop(context);
                 },
@@ -40,7 +42,10 @@ class RingScreen extends StatelessWidget {
               ),
               TextButton.icon(
                 onPressed: () {
-                  Alarm.stop(alarmSettings.id);
+                  Alarm.stop(alarmSettings.id).whenComplete(
+                    () => AlarmNotifier().notify(),
+                  );
+
                   Navigator.pop(context);
                 },
                 icon: const Icon(Icons.alarm_off),
