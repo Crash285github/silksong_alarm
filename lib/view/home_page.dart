@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:alarm/alarm.dart';
 import 'package:alarm/model/alarm_settings.dart';
 import 'package:flutter/material.dart';
+import 'package:silksong_alarm/model/persistence.dart';
 import 'package:silksong_alarm/view/alarm_list.dart';
 import 'package:silksong_alarm/services/permissions.dart';
 import 'package:silksong_alarm/view/ring_screen.dart';
@@ -20,7 +21,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late List<AlarmSettings> alarms;
   static StreamSubscription<AlarmSettings>? subscription;
 
   @override
@@ -30,15 +30,10 @@ class _HomePageState extends State<HomePage> {
     checkAndroidNotificationPermission();
     checkAndroidScheduleExactAlarmPermission();
 
-    loadAlarms();
+    Persistence.getAlarms();
 
     subscription ??= Alarm.ringStream.stream.listen(navigateToRingScreen);
   }
-
-  void loadAlarms() => setState(() {
-        alarms = Alarm.getAlarms();
-        alarms.sort((a, b) => a.dateTime.isBefore(b.dateTime) ? 0 : 1);
-      });
 
   Future<void> navigateToRingScreen(AlarmSettings alarmSettings) async {
     await Navigator.push(
@@ -47,7 +42,7 @@ class _HomePageState extends State<HomePage> {
         builder: (context) => RingScreen(alarmSettings: alarmSettings),
       ),
     );
-    loadAlarms();
+    Persistence.getAlarms();
   }
 
   @override
@@ -56,7 +51,7 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: const Text("Silksong Alarm"),
       ),
-      body: AlarmList(alarms: alarms),
+      body: AlarmList(),
       drawer: const Settings(),
       floatingActionButton: const SetAlarmButton(),
     );

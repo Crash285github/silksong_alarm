@@ -32,9 +32,11 @@ class _SetAlarmSheet extends StatefulWidget {
 }
 
 class _SetAlarmSheetState extends State<_SetAlarmSheet> {
-  DateTime dateTime = DateTime.now().add(
-    const Duration(minutes: 5),
-  );
+  DateTime dateTime = DateTime.now()
+      .add(
+        const Duration(minutes: 5),
+      )
+      .copyWith(second: 0);
 
   @override
   Widget build(BuildContext context) {
@@ -63,6 +65,7 @@ class _SetAlarmSheetState extends State<_SetAlarmSheet> {
                         DateTime time = DateTime.now().copyWith(
                           hour: selected.hour,
                           minute: selected.minute,
+                          second: 0,
                         );
 
                         if (time.isBefore(DateTime.now())) {
@@ -105,11 +108,14 @@ class _SetAlarmSheetState extends State<_SetAlarmSheet> {
                     androidFullScreenIntent: true,
                     enableNotificationOnKill: true,
                     vibrate: true,
-                    volume: 1,
+                    volume: 0.1,
                   ),
                 );
 
                 AlarmNotifier().notify();
+                if (context.mounted) {
+                  Navigator.pop(context);
+                }
               },
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
