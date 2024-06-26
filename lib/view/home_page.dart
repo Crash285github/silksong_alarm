@@ -7,7 +7,7 @@ import 'package:silksong_alarm/model/persistence.dart';
 import 'package:silksong_alarm/view/alarm_list.dart';
 import 'package:silksong_alarm/services/permissions.dart';
 import 'package:silksong_alarm/view/ring_screen.dart';
-import 'package:silksong_alarm/view/set_alarm.dart';
+import 'package:silksong_alarm/view/set_alarm_sheet/set_alarm_sheet.dart';
 
 import 'settings.dart';
 
