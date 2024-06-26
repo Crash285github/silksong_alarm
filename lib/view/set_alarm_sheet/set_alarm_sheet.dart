@@ -4,6 +4,7 @@ import 'package:alarm/alarm.dart';
 import 'package:alarm/model/alarm_settings.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:silksong_alarm/model/alarm_notifier.dart';
 import 'package:silksong_alarm/services/date_time_manager.dart';
 import 'package:silksong_alarm/services/silksong_news.dart';
@@ -62,6 +63,7 @@ class _Sheet extends StatefulWidget {
 
 class _SheetState extends State<_Sheet> {
   DateTime dateTime = DateTime.now().copyWith(second: 0);
+  double volume = .5;
 
   bool get canSet => dateTime.isAfter(
         DateTime.now().add(
@@ -107,7 +109,11 @@ class _SheetState extends State<_Sheet> {
             dateTime: dateTime,
             onTap: _setTime,
           ),
-          const _VolumeChanger(),
+          _VolumeChanger(
+            onChanged: (value) {
+              volume = value;
+            },
+          ),
           const Spacer(),
           AnimatedOpacity(
             duration: Durations.medium1,
@@ -125,7 +131,7 @@ class _SheetState extends State<_Sheet> {
                           androidFullScreenIntent: true,
                           enableNotificationOnKill: true,
                           vibrate: true,
-                          volume: .1,
+                          volume: volume,
                         ),
                       );
 
