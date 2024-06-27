@@ -51,7 +51,7 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: const Text("Silksong Alarm"),
       ),
-      body: AlarmList(),
+      body: const AlarmList(),
       drawer: const Settings(),
       floatingActionButton: const SetAlarmButton(),
     );

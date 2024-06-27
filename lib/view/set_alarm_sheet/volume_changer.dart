@@ -12,16 +12,34 @@ class _VolumeChanger extends StatefulWidget {
 
 class _VolumeChangerState extends State<_VolumeChanger> {
   double localValue = .5;
-  static bool playing = false;
-  static final AudioPlayer _player = AudioPlayer();
+  bool playing = false;
+  final AudioPlayer _player = AudioPlayer();
 
   Future<void> toggleAudio() async {
-    await _player.stop();
-    await _player.setFilePath(await SilksongNews.path);
-    await _player.setVolume(localValue);
-    await _player.play();
+    setState(() => playing = !playing);
 
-    setState(() => playing = _player.playing);
+    if (playing) {
+      await _player.play();
+    } else {
+      await _player.stop();
+    }
+  }
+
+  Future<void> setupAudioPlayer() async {
+    await _player.setFilePath(await SilksongNews.path);
+    await _player.load();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    setupAudioPlayer();
+  }
+
+  @override
+  void dispose() {
+    _player.stop().whenComplete(() => _player.dispose());
+    super.dispose();
   }
 
   @override
@@ -43,7 +61,8 @@ class _VolumeChangerState extends State<_VolumeChanger> {
               Expanded(
                 child: Slider(
                   value: localValue,
-                  onChanged: (value) {
+                  onChanged: (value) async {
+                    await _player.setVolume(localValue);
                     setState(() => localValue = value);
                     widget.onChanged?.call(localValue);
                   },
@@ -61,7 +80,7 @@ class _VolumeChangerState extends State<_VolumeChanger> {
             ),
             clipBehavior: Clip.antiAlias,
             child: InkWell(
-              onTap: toggleAudio,
+              onTap: () => toggleAudio(),
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Icon(

@@ -1,5 +1,7 @@
 library set_alarm_sheet;
 
+import 'dart:ui';
+
 import 'package:alarm/alarm.dart';
 import 'package:alarm/model/alarm_settings.dart';
 import 'package:flutter/material.dart';
@@ -96,53 +98,72 @@ class _SheetState extends State<_Sheet> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.all(24),
-      shape: BeveledRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
+    return BackdropFilter(
+      filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+      child: Stack(
         children: [
-          const _DaysSelector(),
-          _SetTime(
-            dateTime: dateTime,
-            onTap: _setTime,
+          Container(
+            decoration: BoxDecoration(
+                gradient: LinearGradient(
+              colors: [
+                Colors.red.withOpacity(.2),
+                Colors.red.withOpacity(0),
+              ],
+              begin: Alignment.bottomCenter,
+              end: Alignment.topCenter,
+            )),
           ),
-          _VolumeChanger(
-            onChanged: (value) {
-              volume = value;
-            },
-          ),
-          const Spacer(),
-          AnimatedOpacity(
-            duration: Durations.medium1,
-            opacity: canSet ? 1 : .2,
-            child: _SetBtn(
-              onTap: canSet
-                  ? () async {
-                      await Alarm.set(
-                        alarmSettings: AlarmSettings(
-                          id: DateTime.now().millisecondsSinceEpoch % 100000,
-                          dateTime: dateTime,
-                          assetAudioPath: await SilksongNews.path,
-                          notificationTitle: "Your Daily Silksong Alarm",
-                          notificationBody: "There has been... ???",
-                          androidFullScreenIntent: true,
-                          enableNotificationOnKill: true,
-                          vibrate: true,
-                          volume: volume,
-                        ),
-                      );
-
-                      AlarmNotifier().notify();
-                      if (context.mounted) {
-                        Navigator.pop(context);
-                      }
-                    }
-                  : null,
+          Card(
+            margin: const EdgeInsets.all(24),
+            shape: BeveledRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
             ),
-          )
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const _DaysSelector(),
+                _SetTime(
+                  dateTime: dateTime,
+                  onTap: _setTime,
+                ),
+                _VolumeChanger(
+                  onChanged: (value) {
+                    volume = value;
+                  },
+                ),
+                const Spacer(),
+                AnimatedOpacity(
+                  duration: Durations.medium1,
+                  opacity: canSet ? 1 : .2,
+                  child: _SetBtn(
+                    onTap: canSet
+                        ? () async {
+                            await Alarm.set(
+                              alarmSettings: AlarmSettings(
+                                id: DateTime.now().millisecondsSinceEpoch %
+                                    100000,
+                                dateTime: dateTime,
+                                assetAudioPath: await SilksongNews.path,
+                                notificationTitle: "Your Daily Silksong Alarm",
+                                notificationBody: "There has been... ???",
+                                androidFullScreenIntent: true,
+                                enableNotificationOnKill: true,
+                                vibrate: true,
+                                volume: volume,
+                              ),
+                            );
+
+                            AlarmNotifier().notify();
+                            if (context.mounted) {
+                              Navigator.pop(context);
+                            }
+                          }
+                        : null,
+                  ),
+                )
+              ],
+            ),
+          ),
         ],
       ),
     );
