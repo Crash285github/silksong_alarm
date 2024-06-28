@@ -11,7 +11,8 @@ class _VolumeChanger extends StatefulWidget {
 }
 
 class _VolumeChangerState extends State<_VolumeChanger> {
-  double localValue = .5;
+  double? systemVolumeAtInit;
+  double localValue = 0;
   bool playing = false;
   final AudioPlayer _player = AudioPlayer();
 
@@ -28,6 +29,8 @@ class _VolumeChangerState extends State<_VolumeChanger> {
   Future<void> setupAudioPlayer() async {
     await _player.setFilePath(await SilksongNews.path);
     await _player.load();
+    systemVolumeAtInit = await VolumeController().getVolume();
+    setState(() => localValue = systemVolumeAtInit!);
   }
 
   @override
@@ -39,6 +42,9 @@ class _VolumeChangerState extends State<_VolumeChanger> {
   @override
   void dispose() {
     _player.stop().whenComplete(() => _player.dispose());
+    if (systemVolumeAtInit != null) {
+      VolumeController().setVolume(systemVolumeAtInit!, showSystemUI: false);
+    }
     super.dispose();
   }
 
@@ -62,8 +68,9 @@ class _VolumeChangerState extends State<_VolumeChanger> {
                 child: Slider(
                   value: localValue,
                   onChanged: (value) async {
-                    await _player.setVolume(localValue);
                     setState(() => localValue = value);
+
+                    VolumeController().setVolume(value, showSystemUI: false);
                     widget.onChanged?.call(localValue);
                   },
                 ),

@@ -10,6 +10,7 @@ Future<void> main() async {
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
   SilksongNews.init();
+
   await Alarm.init();
 
   runApp(const SilksongAlarmApp());

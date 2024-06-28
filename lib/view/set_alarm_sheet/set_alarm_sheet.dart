@@ -10,6 +10,7 @@ import 'package:just_audio/just_audio.dart';
 import 'package:silksong_alarm/model/alarm_notifier.dart';
 import 'package:silksong_alarm/services/date_time_manager.dart';
 import 'package:silksong_alarm/services/silksong_news.dart';
+import 'package:volume_controller/volume_controller.dart';
 
 part 'volume_changer.dart';
 part 'days_selector.dart';
