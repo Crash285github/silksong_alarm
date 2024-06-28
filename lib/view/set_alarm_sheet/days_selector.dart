@@ -13,25 +13,17 @@ class _DaysSelector extends StatelessWidget {
             (final day) => Expanded(
               child: AspectRatio(
                 aspectRatio: 1,
-                child: Padding(
-                  padding: const EdgeInsets.all(2.0),
-                  child: Material(
-                    type: MaterialType.transparency,
-                    shape: BeveledRectangleBorder(
-                      borderRadius: BorderRadius.circular(512),
-                      side: BorderSide(
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                    ),
-                    clipBehavior: Clip.antiAlias,
-                    child: InkWell(
-                      onTap: () {},
-                      overlayColor: MaterialStatePropertyAll(
-                        Theme.of(context).colorScheme.primary.withOpacity(.2),
-                      ),
-                      child: Center(
-                        child: Text(day[0]),
-                      ),
+                child: BeveledCard(
+                  borderRadius: BorderRadius.circular(512),
+                  borderColor: Theme.of(context).colorScheme.tertiary,
+                  borderWidth: .5,
+                  onTap: () {},
+                  child: Center(
+                    child: Text(
+                      day[0],
+                      style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                            color: Theme.of(context).colorScheme.tertiary,
+                          ),
                     ),
                   ),
                 ),

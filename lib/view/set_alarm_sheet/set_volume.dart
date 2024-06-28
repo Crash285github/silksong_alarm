@@ -1,16 +1,16 @@
 part of 'set_alarm_sheet.dart';
 
-class _VolumeChanger extends StatefulWidget {
-  const _VolumeChanger({
+class _SetVolume extends StatefulWidget {
+  const _SetVolume({
     required this.onChanged,
   });
   final Function(double value)? onChanged;
 
   @override
-  State<_VolumeChanger> createState() => _VolumeChangerState();
+  State<_SetVolume> createState() => _SetVolumeState();
 }
 
-class _VolumeChangerState extends State<_VolumeChanger> {
+class _SetVolumeState extends State<_SetVolume> {
   double? systemVolumeAtInit;
   double localValue = 0;
   bool playing = false;
@@ -62,11 +62,13 @@ class _VolumeChangerState extends State<_VolumeChanger> {
                     : localValue > .5
                         ? Icons.volume_down_sharp
                         : Icons.volume_mute_sharp,
-                color: Theme.of(context).colorScheme.primary,
+                color: Theme.of(context).colorScheme.tertiary,
               ),
               Expanded(
                 child: Slider(
                   value: localValue,
+                  activeColor: Theme.of(context).colorScheme.tertiary,
+                  thumbColor: Theme.of(context).colorScheme.onBackground,
                   onChanged: (value) async {
                     setState(() => localValue = value);
 
@@ -77,24 +79,16 @@ class _VolumeChangerState extends State<_VolumeChanger> {
               )
             ],
           ),
-          Material(
-            type: MaterialType.transparency,
-            shape: BeveledRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
-              side: BorderSide(
-                color: Theme.of(context).colorScheme.primary,
-              ),
-            ),
-            clipBehavior: Clip.antiAlias,
-            child: InkWell(
-              onTap: () => toggleAudio(),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Icon(
-                  playing ? Icons.pause : Icons.play_arrow,
-                  size: 32,
-                  color: Theme.of(context).colorScheme.primary,
-                ),
+          BeveledCard(
+            onTap: toggleAudio,
+            borderRadius: BorderRadius.circular(512),
+            borderColor: Theme.of(context).colorScheme.tertiary,
+            child: Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Icon(
+                playing ? Icons.pause : Icons.play_arrow,
+                size: 32,
+                color: Theme.of(context).colorScheme.tertiary,
               ),
             ),
           )

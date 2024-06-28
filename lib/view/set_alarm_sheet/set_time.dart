@@ -14,31 +14,21 @@ class _SetTime extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(32.0),
-      child: Material(
-        type: MaterialType.transparency,
-        shape: BeveledRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-          side: BorderSide(
-            color: Theme.of(context).colorScheme.secondary,
-            width: .5,
+      child: BeveledCard(
+        onTap: onTap,
+        borderColor: Theme.of(context).colorScheme.tertiary,
+        borderWidth: .5,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 16.0,
+            vertical: 8.0,
           ),
-        ),
-        clipBehavior: Clip.antiAlias,
-        child: InkWell(
-          onTap: onTap,
-          overlayColor: MaterialStatePropertyAll(
-            Theme.of(context).colorScheme.primary.withOpacity(.2),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 16.0,
-              vertical: 8.0,
-            ),
-            child: Text(
-              DateFormat("HH:mm").format(dateTime),
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.displaySmall,
-            ),
+          child: Text(
+            DateFormat("HH:mm").format(dateTime),
+            textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.displaySmall?.copyWith(
+                  color: Theme.of(context).colorScheme.tertiary,
+                ),
           ),
         ),
       ),
