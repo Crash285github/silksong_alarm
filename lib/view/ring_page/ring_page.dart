@@ -1,11 +1,11 @@
 import 'package:alarm/alarm.dart';
 import 'package:alarm/model/alarm_settings.dart';
 import 'package:flutter/material.dart';
-import 'package:silksong_alarm/model/alarm_notifier.dart';
+import 'package:silksong_alarm/services/alarm_notifier.dart';
 
-class RingScreen extends StatelessWidget {
+class RingPage extends StatelessWidget {
   final AlarmSettings alarmSettings;
-  const RingScreen({
+  const RingPage({
     super.key,
     required this.alarmSettings,
   });

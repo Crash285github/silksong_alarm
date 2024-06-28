@@ -3,13 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:silksong_alarm/services/silksong_news.dart';
 
-import 'view/home_page.dart';
+import 'view/home_page/home_page.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
   SilksongNews.init();
+
   await Alarm.init();
 
   runApp(const SilksongAlarmApp());
