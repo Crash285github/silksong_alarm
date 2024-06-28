@@ -7,7 +7,7 @@ import 'package:alarm/model/alarm_settings.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:silksong_alarm/model/alarm_notifier.dart';
+import 'package:silksong_alarm/services/alarm_notifier.dart';
 import 'package:silksong_alarm/services/date_time_manager.dart';
 import 'package:silksong_alarm/services/silksong_news.dart';
 import 'package:volume_controller/volume_controller.dart';
@@ -118,7 +118,12 @@ class _SheetState extends State<_Sheet> {
             margin: const EdgeInsets.all(24),
             shape: BeveledRectangleBorder(
               borderRadius: BorderRadius.circular(16),
+              side: BorderSide(
+                color: Theme.of(context).colorScheme.secondary,
+                width: .2,
+              ),
             ),
+            elevation: 0,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [

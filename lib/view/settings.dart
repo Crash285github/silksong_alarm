@@ -32,7 +32,12 @@ class Settings extends StatelessWidget {
               margin: const EdgeInsets.all(24),
               shape: BeveledRectangleBorder(
                 borderRadius: BorderRadius.circular(16),
+                side: BorderSide(
+                  color: Theme.of(context).colorScheme.secondary,
+                  width: .2,
+                ),
               ),
+              elevation: 0,
               child: Column(
                 children: [
                   Padding(
@@ -71,7 +76,7 @@ class Settings extends StatelessWidget {
                         );
                       }
                     },
-                    text: "Check alarm permission",
+                    text: "Check alarm perms",
                     icon: Icons.alarm,
                   ),
                   _SettingTemplate(
@@ -96,7 +101,7 @@ class Settings extends StatelessWidget {
                         );
                       }
                     },
-                    text: "Check notification permission",
+                    text: "Check notification perms",
                     icon: Icons.notifications,
                   ),
                   _SettingTemplate(
@@ -128,8 +133,19 @@ class Settings extends StatelessWidget {
                     icon: Icons.download_done_outlined,
                   ),
                   const Spacer(),
-                  const Center(
-                    child: Text("v0.1.0"),
+                  Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        "v0.1.0",
+                        style: Theme.of(context).textTheme.labelLarge!.copyWith(
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onBackground
+                                  .withOpacity(.3),
+                            ),
+                      ),
+                    ),
                   )
                 ],
               ),
@@ -174,11 +190,19 @@ class _SettingTemplate extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(icon),
-                const SizedBox(width: 12),
-                Text(
-                  text,
-                  style: Theme.of(context).textTheme.bodyLarge,
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Icon(icon),
+                ),
+                Expanded(
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: Text(
+                      text,
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context).textTheme.bodyLarge,
+                    ),
+                  ),
                 ),
               ],
             ),

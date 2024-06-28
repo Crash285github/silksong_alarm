@@ -32,12 +32,12 @@ class _SetTime extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.symmetric(
               horizontal: 16.0,
-              vertical: 16.0,
+              vertical: 8.0,
             ),
             child: Text(
-              DateFormat("yyyy-MM-dd\nHH:mm").format(dateTime),
+              DateFormat("HH:mm").format(dateTime),
               textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.titleLarge,
+              style: Theme.of(context).textTheme.displaySmall,
             ),
           ),
         ),
