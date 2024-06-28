@@ -7,6 +7,8 @@ import 'package:alarm/alarm.dart';
 import 'package:alarm/model/alarm_settings.dart';
 import 'package:auto_start_flutter/auto_start_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:silksong_alarm/fading_scrollables/fading_scrollables.dart';
 
 import 'package:silksong_alarm/model/persistence.dart';
 import 'package:silksong_alarm/services/permissions.dart';
@@ -29,7 +31,10 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  static final _scrollController = ScrollController();
   static StreamSubscription<AlarmSettings>? _subscription;
+
+  static bool _showFab = true;
 
   @override
   void initState() {
@@ -39,6 +44,16 @@ class _HomePageState extends State<HomePage> {
     checkAndroidScheduleExactAlarmPermission();
 
     Persistence.getAlarms();
+
+    _scrollController.addListener(() {
+      if (_scrollController.offset < 10 && !_showFab) {
+        setState(() => _showFab = true);
+      }
+
+      if (_scrollController.offset > 20 && _showFab) {
+        setState(() => _showFab = false);
+      }
+    });
 
     _subscription ??= Alarm.ringStream.stream.listen(_navigateToRingScreen);
   }
@@ -54,13 +69,24 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        appBar: AppBar(
-          title: const Text("Silksong Alarm"),
-          centerTitle: true,
-          foregroundColor: Theme.of(context).colorScheme.primary,
-        ),
-        body: const AlarmList(),
+        body: CustomScrollView(
+          controller: _scrollController,
+          slivers: [
+            SliverAppBar(
+              title: const Text("Silksong Alarm"),
+              centerTitle: true,
+              foregroundColor: Theme.of(context).colorScheme.primary,
+            ),
+            const AlarmList(),
+            const SliverToBoxAdapter(
+              child: SizedBox(
+                height: 80,
+              ),
+            )
+          ],
+        ).fade(gradientSize: 180),
         drawer: const SettingsDrawer(),
-        floatingActionButton: const ShowAlarmSheetButton(),
+        floatingActionButton: _showFab ? const ShowAlarmSheetButton() : null,
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       );
 }

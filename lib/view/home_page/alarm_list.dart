@@ -15,8 +15,7 @@ class AlarmList extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListenableBuilder(
       listenable: AlarmNotifier(),
-      builder: (context, child) => ListView.builder(
-        padding: const EdgeInsets.only(bottom: 80),
+      builder: (context, child) => SliverList.builder(
         itemCount: Persistence.alarms.length,
         itemBuilder: (context, index) => AlarmItem(
           alarm: Persistence.alarms[index],
