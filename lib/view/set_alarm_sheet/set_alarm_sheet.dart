@@ -17,12 +17,20 @@ part 'days_selector.dart';
 part 'set_btn.dart';
 part 'set_time.dart';
 
-class SetAlarmButton extends StatelessWidget {
-  const SetAlarmButton({super.key});
+class SetAlarmFloatingButton extends StatelessWidget {
+  const SetAlarmFloatingButton({super.key});
 
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton(
+      shape: BeveledRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+        side: BorderSide(
+          color: Theme.of(context).colorScheme.primary,
+          width: .2,
+        ),
+      ),
+      backgroundColor: Theme.of(context).colorScheme.onPrimary,
       onPressed: () async => await _setAlarm(context),
       child: const Icon(Icons.alarm_add),
     );

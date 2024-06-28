@@ -53,7 +53,7 @@ class _HomePageState extends State<HomePage> {
       ),
       body: const AlarmList(),
       drawer: const Settings(),
-      floatingActionButton: const SetAlarmButton(),
+      floatingActionButton: const SetAlarmFloatingButton(),
     );
   }
 }
