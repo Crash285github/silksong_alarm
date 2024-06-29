@@ -17,6 +17,7 @@ import 'package:silksong_alarm/view/home_page/alarm_list.dart';
 import 'package:silksong_alarm/view/ring_page/ring_page.dart';
 import 'package:silksong_alarm/view/set_alarm_sheet/set_alarm_sheet.dart';
 import 'package:silksong_alarm/view/widget/beveled_card.dart';
+import 'package:silksong_alarm/view/widget/popup.dart.dart';
 
 part "drawer/backdrop_gradient.dart";
 part "drawer/setting_template.dart";
