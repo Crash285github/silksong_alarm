@@ -82,7 +82,7 @@ class _SetVolumeState extends State<_SetVolume> {
           BeveledCard(
             onTap: toggleAudio,
             borderRadius: BorderRadius.circular(512),
-            borderColor: Theme.of(context).colorScheme.tertiary,
+            color: Theme.of(context).colorScheme.tertiary,
             child: Padding(
               padding: const EdgeInsets.all(12.0),
               child: Icon(

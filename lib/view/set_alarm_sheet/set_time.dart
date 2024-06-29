@@ -16,7 +16,7 @@ class _SetTime extends StatelessWidget {
       padding: const EdgeInsets.all(32.0),
       child: BeveledCard(
         onTap: onTap,
-        borderColor: Theme.of(context).colorScheme.tertiary,
+        color: Theme.of(context).colorScheme.tertiary,
         borderWidth: .5,
         child: Padding(
           padding: const EdgeInsets.symmetric(

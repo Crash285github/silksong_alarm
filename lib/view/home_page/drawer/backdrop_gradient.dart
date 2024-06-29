@@ -8,8 +8,8 @@ class BackdropGradient extends StatelessWidget {
         decoration: BoxDecoration(
             gradient: LinearGradient(
           colors: [
-            Colors.red.withOpacity(.2),
-            Colors.red.withOpacity(0),
+            Theme.of(context).colorScheme.onPrimary.withOpacity(.2),
+            Theme.of(context).colorScheme.onPrimary.withOpacity(0),
           ],
           begin: Alignment.centerLeft,
           end: Alignment.centerRight,

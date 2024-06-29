@@ -15,7 +15,7 @@ class _DaysSelector extends StatelessWidget {
                 aspectRatio: 1,
                 child: BeveledCard(
                   borderRadius: BorderRadius.circular(512),
-                  borderColor: Theme.of(context).colorScheme.tertiary,
+                  color: Theme.of(context).colorScheme.tertiary,
                   borderWidth: .5,
                   onTap: () {},
                   child: Center(

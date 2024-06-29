@@ -9,7 +9,7 @@ class _SetBtn extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: BeveledCard(
-        borderColor: Theme.of(context).colorScheme.tertiary,
+        color: Theme.of(context).colorScheme.tertiary,
         borderWidth: .5,
         onTap: onTap,
         child: Padding(

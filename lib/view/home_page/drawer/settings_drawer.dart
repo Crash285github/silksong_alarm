@@ -3,6 +3,32 @@ part of '../home_page.dart';
 class SettingsDrawer extends StatelessWidget {
   const SettingsDrawer({super.key});
 
+  Future<void> _autoStart() async => await getAutoStartPermission();
+
+  Future<void> _checkAlarmPerms(BuildContext context) async {
+    final res = await checkAndroidScheduleExactAlarmPermission();
+
+    if (context.mounted) {
+      await showPopupWidget(context, text: "Permission\n${res.name}");
+    }
+  }
+
+  Future<void> _checkNotificationPerms(BuildContext context) async {
+    final res = await checkAndroidNotificationPermission();
+
+    if (context.mounted) {
+      await showPopupWidget(context, text: "Permission\n${res.name}");
+    }
+  }
+
+  Future<void> _downloadLatestNews(BuildContext context) async {
+    final res = await SilksongNews.download();
+
+    if (context.mounted) {
+      await showPopupWidget(context, text: res.text);
+    }
+  }
+
   @override
   Widget build(BuildContext context) => BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
@@ -32,85 +58,20 @@ class SettingsDrawer extends StatelessWidget {
                       SettingTemplate(
                         text: "Auto Start",
                         icon: Icons.run_circle_outlined,
-                        onTap: () async => await getAutoStartPermission(),
+                        onTap: _autoStart,
                       ),
                       SettingTemplate(
-                        onTap: () async {
-                          final res =
-                              await checkAndroidScheduleExactAlarmPermission();
-
-                          if (context.mounted) {
-                            await showDialog(
-                              context: context,
-                              builder: (context) => AlertDialog(
-                                content: Text(
-                                  "Permission is ${res.name}",
-                                  style: Theme.of(context).textTheme.titleLarge,
-                                ),
-                                actions: [
-                                  TextButton(
-                                    child: const Text("ok"),
-                                    onPressed: () => Navigator.pop(context),
-                                  ),
-                                ],
-                              ),
-                            );
-                          }
-                        },
+                        onTap: () => _checkAlarmPerms(context),
                         text: "Check alarm perms",
                         icon: Icons.alarm,
                       ),
                       SettingTemplate(
-                        onTap: () async {
-                          final res =
-                              await checkAndroidNotificationPermission();
-
-                          if (context.mounted) {
-                            await showDialog(
-                              context: context,
-                              builder: (context) => AlertDialog(
-                                content: Text(
-                                  "Permission is ${res.name}",
-                                  style: Theme.of(context).textTheme.titleLarge,
-                                ),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () => Navigator.pop(context),
-                                    child: const Text("ok"),
-                                  ),
-                                ],
-                              ),
-                            );
-                          }
-                        },
+                        onTap: () => _checkNotificationPerms(context),
                         text: "Check notification perms",
                         icon: Icons.notifications,
                       ),
                       SettingTemplate(
-                        onTap: () async {
-                          final res = await SilksongNews.download();
-
-                          if (context.mounted) {
-                            await showDialog(
-                              context: context,
-                              builder: (context) => AlertDialog(
-                                shape: BeveledRectangleBorder(
-                                  borderRadius: BorderRadius.circular(16),
-                                ),
-                                content: Text(
-                                  "Downloaded: $res",
-                                  style: Theme.of(context).textTheme.titleLarge,
-                                ),
-                                actions: [
-                                  TextButton(
-                                    child: const Text("ok"),
-                                    onPressed: () => Navigator.pop(context),
-                                  ),
-                                ],
-                              ),
-                            );
-                          }
-                        },
+                        onTap: () => _downloadLatestNews(context),
                         text: "Download latest news",
                         icon: Icons.download_done_outlined,
                       ),

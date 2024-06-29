@@ -48,14 +48,13 @@ class SilksongNews {
       "${(await getApplicationCacheDirectory()).path}/alarm.mp3 ";
 
   @pragma('vm:entry-point')
-  static Future<bool> download() async {
+  static Future<DownloadResponse> download() async {
     try {
       final latest =
           await _yt.channels.getUploads("UC9OmOMZS6rU0_jIdZOxSHxw").first;
 
       if (latest.id.value == (await Persistence.getLatestVideoId())) {
-        print("Already downloaded id: ${latest.id.value}");
-        return true;
+        return DownloadResponse.alreadyHave;
       }
 
       await Persistence.setLatestVideoId(latest.id.value);
@@ -72,13 +71,21 @@ class SilksongNews {
       await audioStream.pipe(audioFileStream);
       await audioFileStream.flush();
       await audioFileStream.close();
-
-      print("Downloaded id: ${latest.id.value}");
     } catch (e) {
       print(e);
-      return false;
+      return DownloadResponse.failed;
     }
 
-    return true;
+    return DownloadResponse.downloaded;
   }
+}
+
+enum DownloadResponse {
+  failed("Failed"),
+  downloaded("Downloaded"),
+  alreadyHave("Already downloaded"),
+  ;
+
+  final String text;
+  const DownloadResponse(this.text);
 }
