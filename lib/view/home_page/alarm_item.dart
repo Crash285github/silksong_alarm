@@ -41,6 +41,12 @@ class _AlarmItemState extends State<AlarmItem> {
           child: const _DeleteBg(),
         ),
         child: BeveledCard(
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(32),
+            topRight: Radius.circular(8),
+            bottomRight: Radius.circular(32),
+            bottomLeft: Radius.circular(8),
+          ),
           child: Padding(
             padding: const EdgeInsets.symmetric(
               horizontal: 16.0,
@@ -49,14 +55,12 @@ class _AlarmItemState extends State<AlarmItem> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Center(
-                  child: Text(
-                    DateFormat("yyyy-MM-dd (EEE), HH:mm")
-                        .format(widget.alarm.dateTime),
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      fontSize: 32,
-                    ),
+                Text(
+                  DateFormat("HH:mm").format(widget.alarm.dateTime),
+                  textAlign: TextAlign.end,
+                  style: TextStyle(
+                    fontSize: 32,
+                    color: Theme.of(context).colorScheme.primary,
                   ),
                 ),
                 Row(
@@ -67,12 +71,12 @@ class _AlarmItemState extends State<AlarmItem> {
                           aspectRatio: 1,
                           child: BeveledCard(
                             borderRadius: BorderRadius.circular(512),
-                            color: Theme.of(context).colorScheme.tertiary,
+                            color: Theme.of(context).colorScheme.primary,
                             borderWidth: .5,
                             child: ImageFiltered(
                               imageFilter: ColorFilter.mode(
                                 widget.alarm.days.contains(day.index)
-                                    ? Theme.of(context).colorScheme.tertiary
+                                    ? Theme.of(context).colorScheme.primary
                                     : Colors.transparent,
                                 BlendMode.difference,
                               ),
@@ -85,7 +89,7 @@ class _AlarmItemState extends State<AlarmItem> {
                                       ?.copyWith(
                                         color: Theme.of(context)
                                             .colorScheme
-                                            .tertiary,
+                                            .primary,
                                       ),
                                 ),
                               ),
