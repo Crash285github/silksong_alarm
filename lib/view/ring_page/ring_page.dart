@@ -98,7 +98,7 @@ class RingPage extends StatelessWidget {
                     borderRadius: BorderRadius.circular(double.infinity),
                     color: Theme.of(context).colorScheme.primary,
                     onTap: () async {
-                      await AlarmStorageVM().remove(alarm);
+                      await AlarmStorageVM().stop(alarm);
 
                       if (context.mounted) {
                         Navigator.pop(context);

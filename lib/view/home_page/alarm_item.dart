@@ -51,8 +51,9 @@ class _AlarmItemState extends State<AlarmItem> {
               children: [
                 Center(
                   child: Text(
-                    DateFormat("HH:mm").format(widget.alarm.dateTime),
-                    textAlign: TextAlign.end,
+                    DateFormat("yyyy-MM-dd (EEE), HH:mm")
+                        .format(widget.alarm.dateTime),
+                    textAlign: TextAlign.center,
                     style: const TextStyle(
                       fontSize: 32,
                     ),

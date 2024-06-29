@@ -12,7 +12,7 @@ class Alarm {
   })  : _days = days,
         _settings = settings,
         assert(
-          days.every((final day) => day <= 7 && day >= 1),
+          days.every((final day) => day <= 6 && day >= 0),
         );
 
   Set<int> get days => Set.unmodifiable(_days);
@@ -27,6 +27,25 @@ class Alarm {
 
   AlarmSettings get settings => _settings;
 
+  bool get repeating => _days.isNotEmpty;
+
+  DateTime get nextDateTime {
+    final now = DateTime.now();
+    if (dateTime.isAfter(now)) return dateTime;
+
+    final dayNow = now.weekday;
+
+    final days = _days.toList()..sort();
+
+    final nextDay =
+        days.where((final day) => day > dayNow).firstOrNull ?? days[0];
+
+    final diff = ((nextDay - dayNow) % 7) + 1;
+
+    return dateTime.add(Duration(days: diff));
+  }
+
+  // MARK: JSON
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       '_days': _days.toList(),
@@ -47,6 +66,7 @@ class Alarm {
   factory Alarm.fromJson(String source) =>
       Alarm.fromMap(json.decode(source) as Map<String, dynamic>);
 
+  // MARK: EQ
   @override
   bool operator ==(covariant Alarm other) {
     if (identical(this, other)) return true;

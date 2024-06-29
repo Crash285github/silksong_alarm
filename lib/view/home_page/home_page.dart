@@ -8,7 +8,6 @@ import 'package:alarm/model/alarm_settings.dart';
 import 'package:auto_start_flutter/auto_start_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:silksong_alarm/fading_scrollables/fading_scrollables.dart';
-import 'package:silksong_alarm/model/alarm.dart';
 
 import 'package:silksong_alarm/model/persistence.dart';
 import 'package:silksong_alarm/services/permissions.dart';
@@ -69,17 +68,24 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _navigateToRingScreen(final AlarmSettings settigns) async {
-    await Navigator.push(
-      context,
-      MaterialPageRoute<void>(
-        builder: (context) => RingPage(
-          alarm: Alarm(
-            days: {},
-            settings: settigns,
-          ),
+    final alarms = await Persistence.loadAlarms();
+    AlarmStorageVM().replace(alarms ?? []);
+
+    final alarm = AlarmStorageVM()
+        .alarms
+        .where(
+          (final a) => a.id == settigns.id,
+        )
+        .firstOrNull;
+
+    if (mounted && alarm != null) {
+      await Navigator.push(
+        context,
+        MaterialPageRoute<void>(
+          builder: (context) => RingPage(alarm: alarm),
         ),
-      ),
-    );
+      );
+    }
   }
 
   @override

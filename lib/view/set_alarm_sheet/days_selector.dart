@@ -24,9 +24,6 @@ class _DaysSelectorState extends State<_DaysSelector> {
                   color: Theme.of(context).colorScheme.tertiary,
                   borderWidth: .5,
                   onTap: () {
-                    final index = day.index + 1;
-                    assert(index <= 7 && index >= 1);
-
                     setState(() {
                       if (!widget.days.add(day.index)) {
                         widget.days.remove(day.index);

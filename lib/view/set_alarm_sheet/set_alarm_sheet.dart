@@ -51,7 +51,7 @@ class _AlarmSetterBottomSheetState extends State<_AlarmSetterBottomSheet> {
 
   bool get canSet => dateTime.isAfter(
         DateTime.now().add(
-          const Duration(minutes: 1),
+          const Duration(seconds: 10),
         ),
       );
 
