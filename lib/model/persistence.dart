@@ -16,20 +16,24 @@ enum _Keys {
 class Persistence {
   static final _prefs = SharedPreferences.getInstance();
 
-  static Future<bool> saveAlarms(final Set<Alarm> alarms) async =>
+  static Future<bool> saveAlarms(final List<Alarm> alarms) async =>
       await (await _prefs).setString(
         _Keys.alarms.key,
         jsonEncode(alarms),
       );
 
-  static Future<Set<Alarm>?> loadAlarms() async {
+  static Future<List<Alarm>?> loadAlarms() async {
     pckg.Alarm.getAlarms();
 
     final json = (await _prefs).getString(_Keys.alarms.key);
 
     if (json == null) return null;
 
-    return jsonDecode(json) as Set<Alarm>;
+    return (jsonDecode(json) as List)
+        .map<Alarm>(
+          (final alarm) => Alarm.fromJson(alarm),
+        )
+        .toList();
   }
 
   static Future<bool> setLatestVideoId(String id) async =>

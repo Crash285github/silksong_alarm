@@ -7,14 +7,21 @@ class AlarmStorageVM extends ChangeNotifier {
 
   Future<bool> add(final Alarm alarm) async {
     final added = await AlarmStorage.add(alarm);
+
     notifyListeners();
     return added;
   }
 
   Future<bool> remove(final Alarm alarm) async {
     final removed = await AlarmStorage.remove(alarm);
+
     notifyListeners();
     return removed;
+  }
+
+  void replace(final List<Alarm> alarms) {
+    AlarmStorage.replace(alarms);
+    notifyListeners();
   }
 
   //_ Singleton

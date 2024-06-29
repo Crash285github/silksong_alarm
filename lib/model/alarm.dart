@@ -36,7 +36,7 @@ class Alarm {
 
   factory Alarm.fromMap(Map<String, dynamic> map) {
     return Alarm(
-      days: Set<int>.from(map['_days'] as Set<int>),
+      days: Set<int>.from(map['_days'] as List),
       settings:
           AlarmSettings.fromJson(map['_settings'] as Map<String, dynamic>),
     );

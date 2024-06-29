@@ -7,11 +7,12 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:silksong_alarm/model/alarm.dart';
-import 'package:silksong_alarm/services/alarm_storage_vm.dart';
-import 'package:silksong_alarm/services/date_time_manager.dart';
+import 'package:silksong_alarm/viewmodel/alarm_storage_vm.dart';
 import 'package:silksong_alarm/model/news_background_worker/silksong_news.dart';
 import 'package:silksong_alarm/view/widget/beveled_card.dart';
 import 'package:volume_controller/volume_controller.dart';
+
+import '../../model/days_enum.dart';
 
 part 'backdrop_gradient.dart';
 
@@ -46,6 +47,7 @@ class _AlarmSetterBottomSheet extends StatefulWidget {
 class _AlarmSetterBottomSheetState extends State<_AlarmSetterBottomSheet> {
   DateTime dateTime = DateTime.now().copyWith(second: 0);
   double volume = .5;
+  final Set<int> days = {};
 
   bool get canSet => dateTime.isAfter(
         DateTime.now().add(
@@ -77,7 +79,7 @@ class _AlarmSetterBottomSheetState extends State<_AlarmSetterBottomSheet> {
   Future<void> _setAlarm() async {
     await AlarmStorageVM().add(
       Alarm(
-        days: {},
+        days: days,
         settings: AlarmSettings(
           id: DateTime.now().millisecondsSinceEpoch % 100000,
           dateTime: dateTime,
@@ -111,7 +113,7 @@ class _AlarmSetterBottomSheetState extends State<_AlarmSetterBottomSheet> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const _DaysSelector(),
+                  _DaysSelector(days),
                   _SetTime(
                     dateTime: dateTime,
                     onTap: _setTime,

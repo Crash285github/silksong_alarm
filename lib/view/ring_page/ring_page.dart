@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:silksong_alarm/model/alarm.dart';
-import 'package:silksong_alarm/services/alarm_storage_vm.dart';
+import 'package:silksong_alarm/viewmodel/alarm_storage_vm.dart';
 import 'package:silksong_alarm/view/widget/beveled_card.dart';
 
 class RingPage extends StatelessWidget {
