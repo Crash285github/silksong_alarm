@@ -1,6 +1,5 @@
 part of '../home_page.dart';
 
-
 class SettingTemplate extends StatelessWidget {
   final Function() onTap;
   final String text;
@@ -18,7 +17,7 @@ class SettingTemplate extends StatelessWidget {
         child: BeveledCard(
           onTap: onTap,
           borderWidth: .5,
-          borderColor: Theme.of(context).colorScheme.tertiary,
+          color: Theme.of(context).colorScheme.tertiary,
           child: Padding(
             padding: const EdgeInsets.symmetric(
               vertical: 8.0,

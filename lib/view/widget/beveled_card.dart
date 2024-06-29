@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 
 class BeveledCard extends StatelessWidget {
   final Widget child;
-  final Color? borderColor;
+  final Color? color;
   final double borderWidth;
   final BorderRadiusGeometry borderRadius;
   final Function()? onTap;
   const BeveledCard({
     super.key,
     required this.child,
-    this.borderColor,
+    this.color,
     this.borderWidth = .2,
     this.borderRadius = const BorderRadius.all(Radius.elliptical(16, 512)),
     this.onTap,
@@ -17,8 +17,7 @@ class BeveledCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final borderColor =
-        this.borderColor ?? Theme.of(context).colorScheme.primary;
+    final borderColor = color ?? Theme.of(context).colorScheme.primary;
 
     return Card(
       elevation: 4,

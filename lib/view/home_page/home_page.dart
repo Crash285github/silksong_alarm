@@ -21,7 +21,7 @@ import 'package:silksong_alarm/view/widget/beveled_card.dart';
 part "drawer/backdrop_gradient.dart";
 part "drawer/setting_template.dart";
 part "drawer/settings_drawer.dart";
-part "drawer/show_alarm_sheet_button.dart";
+part "show_alarm_sheet_button.dart";
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});

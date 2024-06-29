@@ -1,4 +1,4 @@
-part of '../home_page.dart';
+part of 'home_page.dart';
 
 class ShowAlarmSheetButton extends StatelessWidget {
   const ShowAlarmSheetButton({super.key});
@@ -8,7 +8,7 @@ class ShowAlarmSheetButton extends StatelessWidget {
     return BeveledCard(
       borderRadius: BorderRadius.circular(16),
       onTap: () async => await showSetAlarmBottomSheet(context),
-      borderColor: Theme.of(context).colorScheme.tertiary,
+      color: Theme.of(context).colorScheme.tertiary,
       borderWidth: .5,
       child: Padding(
         padding: const EdgeInsets.all(16.0),
