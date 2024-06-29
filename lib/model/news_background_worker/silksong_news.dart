@@ -12,7 +12,7 @@ class SilksongNews {
   static final _yt = YoutubeExplode();
 
   static Future<void> init() async {
-    await download();
+    download();
 
     await BackgroundFetch.configure(
       BackgroundFetchConfig(
