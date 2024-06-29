@@ -1,14 +1,13 @@
-import 'package:alarm/alarm.dart';
-import 'package:alarm/model/alarm_settings.dart';
 import 'package:flutter/material.dart';
-import 'package:silksong_alarm/services/alarm_notifier.dart';
+import 'package:silksong_alarm/model/alarm.dart';
+import 'package:silksong_alarm/services/alarm_storage_vm.dart';
 import 'package:silksong_alarm/view/widget/beveled_card.dart';
 
 class RingPage extends StatelessWidget {
-  final AlarmSettings alarmSettings;
+  final Alarm alarm;
   const RingPage({
     super.key,
-    required this.alarmSettings,
+    required this.alarm,
   });
 
   @override
@@ -99,8 +98,7 @@ class RingPage extends StatelessWidget {
                     borderRadius: BorderRadius.circular(double.infinity),
                     color: Theme.of(context).colorScheme.primary,
                     onTap: () async {
-                      await Alarm.stop(alarmSettings.id);
-                      AlarmNotifier().notify();
+                      await AlarmStorageVM().remove(alarm);
 
                       if (context.mounted) {
                         Navigator.pop(context);

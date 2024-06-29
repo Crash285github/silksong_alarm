@@ -1,3 +1,5 @@
+library silksong_news;
+
 import 'dart:io';
 
 import 'package:background_fetch/background_fetch.dart';
@@ -72,7 +74,6 @@ class SilksongNews {
       await audioFileStream.flush();
       await audioFileStream.close();
     } catch (e) {
-      print(e);
       return DownloadResponse.failed;
     }
 

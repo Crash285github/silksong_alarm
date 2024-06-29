@@ -2,16 +2,14 @@ library set_alarm_sheet;
 
 import 'dart:ui';
 
-import 'package:alarm/alarm.dart';
 import 'package:alarm/model/alarm_settings.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:silksong_alarm/services/alarm_notifier.dart';
+import 'package:silksong_alarm/model/alarm.dart';
+import 'package:silksong_alarm/services/alarm_storage_vm.dart';
 import 'package:silksong_alarm/services/date_time_manager.dart';
-import 'package:silksong_alarm/services/silksong_news.dart';
+import 'package:silksong_alarm/model/news_background_worker/silksong_news.dart';
 import 'package:silksong_alarm/view/widget/beveled_card.dart';
 import 'package:volume_controller/volume_controller.dart';
 
@@ -73,27 +71,27 @@ class _AlarmSetterBottomSheetState extends State<_AlarmSetterBottomSheet> {
       }
 
       setState(() => dateTime = time);
-
-      AlarmNotifier().notify();
     }
   }
 
   Future<void> _setAlarm() async {
-    await Alarm.set(
-      alarmSettings: AlarmSettings(
-        id: DateTime.now().millisecondsSinceEpoch % 100000,
-        dateTime: dateTime,
-        assetAudioPath: await SilksongNews.path,
-        notificationTitle: "Your Daily Silksong Alarm",
-        notificationBody: "There has been... ???",
-        androidFullScreenIntent: true,
-        enableNotificationOnKill: true,
-        vibrate: true,
-        volume: volume,
+    await AlarmStorageVM().add(
+      Alarm(
+        days: {},
+        settings: AlarmSettings(
+          id: DateTime.now().millisecondsSinceEpoch % 100000,
+          dateTime: dateTime,
+          assetAudioPath: await SilksongNews.path,
+          notificationTitle: "Your Daily Silksong Alarm",
+          notificationBody: "There has been... ???",
+          androidFullScreenIntent: true,
+          enableNotificationOnKill: true,
+          vibrate: true,
+          volume: volume,
+        ),
       ),
     );
 
-    AlarmNotifier().notify();
     if (mounted) {
       Navigator.pop(context);
     }

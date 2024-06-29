@@ -3,16 +3,16 @@ library home_page;
 import 'dart:async';
 import 'dart:ui';
 
-import 'package:alarm/alarm.dart';
+import 'package:alarm/alarm.dart' as pckg;
 import 'package:alarm/model/alarm_settings.dart';
 import 'package:auto_start_flutter/auto_start_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:silksong_alarm/fading_scrollables/fading_scrollables.dart';
+import 'package:silksong_alarm/model/alarm.dart';
 
 import 'package:silksong_alarm/model/persistence.dart';
 import 'package:silksong_alarm/services/permissions.dart';
-import 'package:silksong_alarm/services/silksong_news.dart';
+import 'package:silksong_alarm/model/news_background_worker/silksong_news.dart';
 import 'package:silksong_alarm/view/home_page/alarm_list.dart';
 import 'package:silksong_alarm/view/ring_page/ring_page.dart';
 import 'package:silksong_alarm/view/set_alarm_sheet/set_alarm_sheet.dart';
@@ -44,7 +44,7 @@ class _HomePageState extends State<HomePage> {
     checkAndroidNotificationPermission();
     checkAndroidScheduleExactAlarmPermission();
 
-    Persistence.getAlarms();
+    Persistence.loadAlarms();
 
     _scrollController.addListener(() {
       if (_scrollController.offset < 10 && !_showFab) {
@@ -56,14 +56,21 @@ class _HomePageState extends State<HomePage> {
       }
     });
 
-    _subscription ??= Alarm.ringStream.stream.listen(_navigateToRingScreen);
+    _subscription ??= pckg.Alarm.ringStream.stream.listen(
+      _navigateToRingScreen,
+    );
   }
 
-  Future<void> _navigateToRingScreen(final AlarmSettings alarmSettings) async {
+  Future<void> _navigateToRingScreen(final AlarmSettings settigns) async {
     await Navigator.push(
       context,
       MaterialPageRoute<void>(
-        builder: (context) => RingPage(alarmSettings: alarmSettings),
+        builder: (context) => RingPage(
+          alarm: Alarm(
+            days: {},
+            settings: settigns,
+          ),
+        ),
       ),
     );
   }

@@ -1,11 +1,8 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:alarm/alarm.dart';
-import 'package:alarm/model/alarm_settings.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:silksong_alarm/model/alarm.dart';
 
-import 'package:silksong_alarm/model/persistence.dart';
-import 'package:silksong_alarm/services/alarm_notifier.dart';
+import 'package:silksong_alarm/services/alarm_storage_vm.dart';
 import 'package:silksong_alarm/view/widget/beveled_card.dart';
 
 class AlarmList extends StatelessWidget {
@@ -14,11 +11,11 @@ class AlarmList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListenableBuilder(
-      listenable: AlarmNotifier(),
+      listenable: AlarmStorageVM(),
       builder: (context, child) => SliverList.builder(
-        itemCount: Persistence.alarms.length,
+        itemCount: AlarmStorageVM().alarms.length,
         itemBuilder: (context, index) => AlarmItem(
-          alarm: Persistence.alarms[index],
+          alarm: AlarmStorageVM().alarms[index],
         ),
       ),
     );
@@ -26,7 +23,7 @@ class AlarmList extends StatelessWidget {
 }
 
 class AlarmItem extends StatefulWidget {
-  final AlarmSettings alarm;
+  final Alarm alarm;
   const AlarmItem({
     super.key,
     required this.alarm,
@@ -48,10 +45,7 @@ class _AlarmItemState extends State<AlarmItem> {
       child: Dismissible(
         key: key,
         direction: DismissDirection.endToStart,
-        onDismissed: (direction) async {
-          await Alarm.stop(widget.alarm.id);
-          AlarmNotifier().notify();
-        },
+        onDismissed: (_) async => await AlarmStorageVM().remove(widget.alarm),
         onUpdate: (details) {
           if (details.reached != reached) {
             setState(() => reached = details.reached);
