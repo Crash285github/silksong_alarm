@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:silksong_alarm/model/alarm.dart';
+import 'package:silksong_alarm/model/persistence.dart';
 import 'package:silksong_alarm/viewmodel/alarm_storage_vm.dart';
 import 'package:silksong_alarm/model/news_background_worker/silksong_news.dart';
 import 'package:silksong_alarm/view/widget/beveled_card.dart';
@@ -77,6 +78,8 @@ class _AlarmSetterBottomSheetState extends State<_AlarmSetterBottomSheet> {
   }
 
   Future<void> _setAlarm() async {
+    final newsData = await Persistence.getSilksongNewsData();
+
     await AlarmStorageVM().add(
       Alarm(
         days: days,
@@ -84,8 +87,8 @@ class _AlarmSetterBottomSheetState extends State<_AlarmSetterBottomSheet> {
           id: DateTime.now().millisecondsSinceEpoch % 100000,
           dateTime: dateTime,
           assetAudioPath: await SilksongNews.path,
-          notificationTitle: "Your Daily Silksong Alarm",
-          notificationBody: "There has been... ???",
+          notificationTitle: newsData?.title ?? "Your Daily Silksong Alarm",
+          notificationBody: newsData?.description ?? "There has been... ???",
           androidFullScreenIntent: true,
           enableNotificationOnKill: true,
           vibrate: true,
