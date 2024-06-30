@@ -6,21 +6,20 @@ import 'package:alarm/model/alarm_settings.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:silksong_alarm/model/alarm.dart';
-import 'package:silksong_alarm/model/persistence.dart';
-import 'package:silksong_alarm/viewmodel/alarm_storage_vm.dart';
-import 'package:silksong_alarm/model/news_background_worker/silksong_news.dart';
-import 'package:silksong_alarm/view/widget/beveled_card.dart';
 import 'package:volume_controller/volume_controller.dart';
 
-import '../../model/days_enum.dart';
+import 'package:silksong_alarm/model/alarm.dart';
+import 'package:silksong_alarm/model/days_enum.dart';
+import 'package:silksong_alarm/model/news_background_worker/silksong_news.dart';
+import 'package:silksong_alarm/model/persistence.dart';
+import 'package:silksong_alarm/view/widget/beveled_card.dart';
+import 'package:silksong_alarm/viewmodel/alarm_storage_vm.dart';
 
 part 'backdrop_gradient.dart';
-
-part 'set_volume.dart';
 part 'days_selector.dart';
 part 'set_btn.dart';
 part 'set_time.dart';
+part 'set_volume.dart';
 
 Future<void> showSetAlarmBottomSheet(BuildContext context) async {
   return await showModalBottomSheet(
@@ -50,12 +49,6 @@ class _AlarmSetterBottomSheetState extends State<_AlarmSetterBottomSheet> {
   double volume = .5;
   final Set<int> days = {};
 
-  bool get canSet => dateTime.isAfter(
-        DateTime.now().add(
-          const Duration(seconds: 10),
-        ),
-      );
-
   Future<void> _setTime() async {
     final selected = await showTimePicker(
       context: context,
@@ -69,7 +62,11 @@ class _AlarmSetterBottomSheetState extends State<_AlarmSetterBottomSheet> {
         second: 0,
       );
 
-      if (time.isBefore(DateTime.now())) {
+      if (time.isBefore(
+        DateTime.now().subtract(
+          const Duration(minutes: 1),
+        ),
+      )) {
         time = time.add(const Duration(days: 1));
       }
 
@@ -80,17 +77,21 @@ class _AlarmSetterBottomSheetState extends State<_AlarmSetterBottomSheet> {
   Future<void> _setAlarm() async {
     final newsData = await Persistence.getSilksongNewsData();
 
+    final nextDate = Alarm.getNextDateTime(days.toList(), dateTime);
+
     await AlarmStorageVM().add(
       Alarm(
         days: days,
         settings: AlarmSettings(
           id: DateTime.now().millisecondsSinceEpoch % 100000,
-          dateTime: dateTime,
+          dateTime: nextDate,
           assetAudioPath: await SilksongNews.path,
           notificationTitle: newsData?.title ?? "Your Daily Silksong Alarm",
           notificationBody: newsData?.description ?? "There has been... ???",
           androidFullScreenIntent: true,
           enableNotificationOnKill: true,
+          loopAudio: false,
+          fadeDuration: 0,
           vibrate: true,
           volume: volume,
         ),
@@ -127,13 +128,7 @@ class _AlarmSetterBottomSheetState extends State<_AlarmSetterBottomSheet> {
                     },
                   ),
                   const Spacer(),
-                  AnimatedOpacity(
-                    duration: Durations.medium1,
-                    opacity: canSet ? 1 : .2,
-                    child: _SetBtn(
-                      onTap: canSet ? _setAlarm : null,
-                    ),
-                  )
+                  _SetBtn(onTap: _setAlarm)
                 ],
               ),
             ),

@@ -29,13 +29,16 @@ class Alarm {
 
   bool get repeating => _days.isNotEmpty;
 
-  DateTime get nextDateTime {
+  static DateTime getNextDateTime(
+    final List<int> days,
+    final DateTime dateTime,
+  ) {
     final now = DateTime.now();
     if (dateTime.isAfter(now)) return dateTime;
 
     final dayNow = now.weekday;
 
-    final days = _days.toList()..sort();
+    days.sort();
 
     final nextDay =
         days.where((final day) => day > dayNow).firstOrNull ?? days[0];
@@ -44,6 +47,11 @@ class Alarm {
 
     return dateTime.add(Duration(days: diff));
   }
+
+  DateTime get nextDateTime => getNextDateTime(
+        _days.toList(),
+        dateTime,
+      );
 
   // MARK: JSON
   Map<String, dynamic> toMap() {

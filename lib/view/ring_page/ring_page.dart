@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:silksong_alarm/model/alarm.dart';
+import 'package:silksong_alarm/model/news_background_worker/silksong_news_data.dart';
+import 'package:silksong_alarm/model/persistence.dart';
 import 'package:silksong_alarm/viewmodel/alarm_storage_vm.dart';
 import 'package:silksong_alarm/view/widget/beveled_card.dart';
 
-class RingPage extends StatelessWidget {
+class RingPage extends StatefulWidget {
   final Alarm alarm;
   const RingPage({
     super.key,
@@ -11,14 +13,36 @@ class RingPage extends StatelessWidget {
   });
 
   @override
+  State<RingPage> createState() => _RingPageState();
+}
+
+class _RingPageState extends State<RingPage> {
+  SilksongNewsData? data;
+
+  @override
+  void initState() {
+    super.initState();
+    Persistence.getSilksongNewsData().then(
+      (value) => setState(() => data = value),
+    );
+  }
+
+  String get formattedDuration {
+    final duration = data?.seconds;
+    if (duration == null) return "";
+
+    int minutes = duration ~/ 60;
+    int seconds = duration % 60;
+
+    return "$minutes:$seconds";
+  }
+
+  @override
   Widget build(BuildContext context) {
     return PopScope(
       canPop: false,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text("Silksong News???"),
-          centerTitle: true,
-          foregroundColor: Theme.of(context).colorScheme.primary,
           automaticallyImplyLeading: false,
         ),
         body: Column(
@@ -29,15 +53,30 @@ class RingPage extends StatelessWidget {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Slider(
-                      value: 1,
-                      activeColor: Theme.of(context).colorScheme.primary,
-                      thumbColor: Theme.of(context).colorScheme.secondary,
-                      onChanged: (value) {},
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        formattedDuration,
+                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                      ),
                     ),
-                    Text(
-                      "0:00 / 1:33",
-                      style: Theme.of(context).textTheme.displaySmall,
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: TweenAnimationBuilder<double>(
+                        duration: Duration(seconds: data?.seconds ?? 0),
+                        tween: Tween<double>(
+                          begin: 0,
+                          end: data?.seconds.toDouble() ?? 0.0,
+                        ),
+                        builder: (context, value, child) => BeveledCard(
+                          child: LinearProgressIndicator(
+                            minHeight: 24,
+                            value: value / (data?.seconds ?? 1),
+                          ),
+                        ),
+                      ),
                     )
                   ],
                 ),
@@ -105,7 +144,7 @@ class RingPage extends StatelessWidget {
                       borderRadius: BorderRadius.circular(double.infinity),
                       color: Theme.of(context).colorScheme.primary,
                       onTap: () async {
-                        await AlarmStorageVM().stop(alarm);
+                        await AlarmStorageVM().stop(widget.alarm);
 
                         if (context.mounted) {
                           Navigator.pop(context);

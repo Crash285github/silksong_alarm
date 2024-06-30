@@ -21,6 +21,20 @@ class _AlarmItemState extends State<AlarmItem> {
 
   final key = UniqueKey();
 
+  String get timeLeft {
+    final difference = widget.alarm.nextDateTime.difference(DateTime.now());
+
+    final days = difference.inDays;
+    if (days > 1) return "in $days days";
+    if (days == 1) return "in a day";
+
+    final hours = difference.inHours;
+    if (hours > 1) return "in $hours hours";
+    if (hours == 1) return "in an hour";
+
+    return "soon 🤡";
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -49,18 +63,36 @@ class _AlarmItemState extends State<AlarmItem> {
           ),
           child: Padding(
             padding: const EdgeInsets.symmetric(
-              horizontal: 16.0,
-              vertical: 8.0,
+              horizontal: 12.0,
+              vertical: 2.0,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Text(
-                  DateFormat("HH:mm").format(widget.alarm.dateTime),
-                  textAlign: TextAlign.end,
-                  style: TextStyle(
-                    fontSize: 32,
-                    color: Theme.of(context).colorScheme.primary,
+                Padding(
+                  padding: const EdgeInsets.only(left: 24.0),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        timeLeft,
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Theme.of(context)
+                              .colorScheme
+                              .primary
+                              .withOpacity(.5),
+                        ),
+                      ),
+                      const Spacer(),
+                      Text(
+                        DateFormat("HH:mm").format(widget.alarm.dateTime),
+                        style: TextStyle(
+                          fontSize: 32,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 Row(

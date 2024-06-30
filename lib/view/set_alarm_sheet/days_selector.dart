@@ -9,6 +9,8 @@ class _DaysSelector extends StatefulWidget {
 }
 
 class _DaysSelectorState extends State<_DaysSelector> {
+  bool isToday(int day) => day == DateTime.now().weekday - 1;
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -41,7 +43,9 @@ class _DaysSelectorState extends State<_DaysSelector> {
                       child: Text(
                         day.name[0].toUpperCase(),
                         style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                              color: Theme.of(context).colorScheme.tertiary,
+                              color: isToday(day.index)
+                                  ? Theme.of(context).colorScheme.primary
+                                  : Theme.of(context).colorScheme.tertiary,
                             ),
                       ),
                     ),
