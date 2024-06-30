@@ -30,6 +30,7 @@ class _SetVolumeState extends State<_SetVolume> {
     await _player.setFilePath(await SilksongNews.path);
     await _player.load();
     systemVolumeAtInit = await VolumeController().getVolume();
+    widget.onChanged?.call(localValue);
     setState(() => localValue = systemVolumeAtInit!);
   }
 

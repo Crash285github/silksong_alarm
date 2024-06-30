@@ -1,18 +1,47 @@
-import 'package:alarm/alarm.dart';
-import 'package:alarm/model/alarm_settings.dart';
+import 'dart:convert';
+
+import 'package:alarm/alarm.dart' as pckg;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:silksong_alarm/model/alarm.dart';
+import 'package:silksong_alarm/model/news_background_worker/silksong_news_data.dart';
+
+enum _Keys {
+  alarms,
+  silksongNewsData,
+}
 
 class Persistence {
   static final _prefs = SharedPreferences.getInstance();
 
-  static List<AlarmSettings> alarms = [];
+  static Future<bool> saveAlarms(final List<Alarm> alarms) async =>
+      await (await _prefs).setString(
+        _Keys.alarms.name,
+        jsonEncode(alarms),
+      );
 
-  static void getAlarms() async => alarms = Alarm.getAlarms()
-    ..sort((a, b) => a.dateTime.isBefore(b.dateTime) ? 0 : 1);
+  static Future<List<Alarm>?> loadAlarms() async {
+    pckg.Alarm.getAlarms();
 
-  static Future<bool> setLatestVideoId(String id) async =>
-      await (await _prefs).setString("latestVideoId", id);
+    final json = (await _prefs).getString(_Keys.alarms.name);
 
-  static Future<String?> getLatestVideoId() async =>
-      (await _prefs).getString('latestVideoId');
+    if (json == null) return null;
+
+    return (jsonDecode(json) as List)
+        .map<Alarm>(
+          (final alarm) => Alarm.fromJson(alarm),
+        )
+        .toList();
+  }
+
+  static Future<bool> setSilksongNewsData(final SilksongNewsData data) async =>
+      await (await _prefs)
+          .setString(_Keys.silksongNewsData.name, data.toJson());
+
+  static Future<SilksongNewsData?> getSilksongNewsData() async {
+    final json = (await _prefs).getString(_Keys.silksongNewsData.name);
+
+    if (json == null) return null;
+
+    return SilksongNewsData.fromJson(json);
+  }
 }

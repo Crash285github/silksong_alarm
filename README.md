@@ -1,3 +1,3 @@
 # silksong_alarm
 
-A new Flutter project.
+An mobile application that fetches the newest Daily Silksong News and plays it back as an alarm.

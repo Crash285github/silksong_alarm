@@ -2,25 +2,26 @@ library set_alarm_sheet;
 
 import 'dart:ui';
 
-import 'package:alarm/alarm.dart';
 import 'package:alarm/model/alarm_settings.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:silksong_alarm/services/alarm_notifier.dart';
-import 'package:silksong_alarm/services/date_time_manager.dart';
-import 'package:silksong_alarm/services/silksong_news.dart';
-import 'package:silksong_alarm/view/widget/beveled_card.dart';
 import 'package:volume_controller/volume_controller.dart';
 
-part 'backdrop_gradient.dart';
+import 'package:silksong_alarm/model/alarm.dart';
+import 'package:silksong_alarm/model/days_enum.dart';
+import 'package:silksong_alarm/model/news_background_worker/silksong_news.dart';
+import 'package:silksong_alarm/model/persistence.dart';
+import 'package:silksong_alarm/view/widget/beveled_card.dart';
+import 'package:silksong_alarm/viewmodel/alarm_storage_vm.dart';
 
-part 'set_volume.dart';
+part 'backdrop_gradient.dart';
 part 'days_selector.dart';
 part 'set_btn.dart';
+part 'set_loop.dart';
 part 'set_time.dart';
+part 'set_vibration.dart';
+part 'set_volume.dart';
 
 Future<void> showSetAlarmBottomSheet(BuildContext context) async {
   return await showModalBottomSheet(
@@ -46,14 +47,11 @@ class _AlarmSetterBottomSheet extends StatefulWidget {
 }
 
 class _AlarmSetterBottomSheetState extends State<_AlarmSetterBottomSheet> {
+  final Set<int> days = {};
   DateTime dateTime = DateTime.now().copyWith(second: 0);
   double volume = .5;
-
-  bool get canSet => dateTime.isAfter(
-        DateTime.now().add(
-          const Duration(minutes: 1),
-        ),
-      );
+  bool loop = false;
+  bool vibrate = true;
 
   Future<void> _setTime() async {
     final selected = await showTimePicker(
@@ -68,32 +66,42 @@ class _AlarmSetterBottomSheetState extends State<_AlarmSetterBottomSheet> {
         second: 0,
       );
 
-      if (time.isBefore(DateTime.now())) {
+      if (time.isBefore(
+        DateTime.now().subtract(
+          const Duration(minutes: 1),
+        ),
+      )) {
         time = time.add(const Duration(days: 1));
       }
 
       setState(() => dateTime = time);
-
-      AlarmNotifier().notify();
     }
   }
 
   Future<void> _setAlarm() async {
-    await Alarm.set(
-      alarmSettings: AlarmSettings(
-        id: DateTime.now().millisecondsSinceEpoch % 100000,
-        dateTime: dateTime,
-        assetAudioPath: await SilksongNews.path,
-        notificationTitle: "Your Daily Silksong Alarm",
-        notificationBody: "There has been... ???",
-        androidFullScreenIntent: true,
-        enableNotificationOnKill: true,
-        vibrate: true,
-        volume: volume,
+    final newsData = await Persistence.getSilksongNewsData();
+
+    final nextDate = Alarm.getNextDateTime(days.toList(), dateTime);
+
+    await AlarmStorageVM().add(
+      Alarm(
+        days: days,
+        settings: AlarmSettings(
+          id: DateTime.now().millisecondsSinceEpoch % 100000,
+          dateTime: nextDate,
+          assetAudioPath: await SilksongNews.path,
+          notificationTitle: newsData?.title ?? "Your Daily Silksong Alarm",
+          notificationBody: newsData?.description ?? "There has been... ???",
+          androidFullScreenIntent: true,
+          enableNotificationOnKill: true,
+          loopAudio: loop,
+          fadeDuration: 0,
+          vibrate: vibrate,
+          volume: volume,
+        ),
       ),
     );
 
-    AlarmNotifier().notify();
     if (mounted) {
       Navigator.pop(context);
     }
@@ -113,10 +121,29 @@ class _AlarmSetterBottomSheetState extends State<_AlarmSetterBottomSheet> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const _DaysSelector(),
-                  _SetTime(
-                    dateTime: dateTime,
-                    onTap: _setTime,
+                  _DaysSelector(days),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 16.0,
+                      horizontal: 8.0,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        _SetVibration(
+                          vibrate: vibrate,
+                          onTap: () => setState(() => vibrate = !vibrate),
+                        ),
+                        _SetTime(
+                          dateTime: dateTime,
+                          onTap: _setTime,
+                        ),
+                        _SetLoop(
+                          loop: loop,
+                          onTap: () => setState(() => loop = !loop),
+                        ),
+                      ],
+                    ),
                   ),
                   _SetVolume(
                     onChanged: (value) {
@@ -124,13 +151,7 @@ class _AlarmSetterBottomSheetState extends State<_AlarmSetterBottomSheet> {
                     },
                   ),
                   const Spacer(),
-                  AnimatedOpacity(
-                    duration: Durations.medium1,
-                    opacity: canSet ? 1 : .2,
-                    child: _SetBtn(
-                      onTap: canSet ? _setAlarm : null,
-                    ),
-                  )
+                  _SetBtn(onTap: _setAlarm)
                 ],
               ),
             ),

@@ -1,7 +1,10 @@
+library silksong_news;
+
 import 'dart:io';
 
 import 'package:background_fetch/background_fetch.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:silksong_alarm/model/news_background_worker/silksong_news_data.dart';
 import 'package:silksong_alarm/model/persistence.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
@@ -9,7 +12,7 @@ class SilksongNews {
   static final _yt = YoutubeExplode();
 
   static Future<void> init() async {
-    await download();
+    download();
 
     await BackgroundFetch.configure(
       BackgroundFetchConfig(
@@ -53,11 +56,20 @@ class SilksongNews {
       final latest =
           await _yt.channels.getUploads("UC9OmOMZS6rU0_jIdZOxSHxw").first;
 
-      if (latest.id.value == (await Persistence.getLatestVideoId())) {
+      final silksongData = await Persistence.getSilksongNewsData();
+
+      if (silksongData?.id == latest.id.value) {
         return DownloadResponse.alreadyHave;
       }
 
-      await Persistence.setLatestVideoId(latest.id.value);
+      await Persistence.setSilksongNewsData(
+        SilksongNewsData(
+          id: latest.id.value,
+          title: latest.title,
+          description: latest.description,
+          seconds: latest.duration?.inSeconds ?? 0,
+        ),
+      );
 
       final streamManifest =
           await _yt.videos.streamsClient.getManifest(latest.id);
@@ -72,7 +84,6 @@ class SilksongNews {
       await audioFileStream.flush();
       await audioFileStream.close();
     } catch (e) {
-      print(e);
       return DownloadResponse.failed;
     }
 
