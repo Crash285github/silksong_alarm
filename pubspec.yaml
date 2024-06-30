@@ -1,7 +1,7 @@
 name: silksong_alarm
 description: "App of silksanity."
 publish_to: "none"
-version: 0.4.1
+version: 0.4.2
 
 environment:
   sdk: ">=3.3.3 <4.0.0"
