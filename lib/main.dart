@@ -2,6 +2,7 @@ import 'package:alarm/alarm.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:silksong_alarm/model/news_background_worker/silksong_news.dart';
+import 'package:silksong_alarm/model/persistence.dart';
 
 import 'view/home_page/home_page.dart';
 
@@ -12,6 +13,7 @@ Future<void> main() async {
   SilksongNews.init();
 
   await Alarm.init();
+  await Persistence.init();
 
   runApp(const SilksongAlarmApp());
 }

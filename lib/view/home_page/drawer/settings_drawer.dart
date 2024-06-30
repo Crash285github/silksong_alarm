@@ -80,7 +80,7 @@ class SettingsDrawer extends StatelessWidget {
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
-                            "v0.1.0",
+                            Persistence.appVersion,
                             style: Theme.of(context)
                                 .textTheme
                                 .labelLarge!

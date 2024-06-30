@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:alarm/alarm.dart' as pckg;
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:silksong_alarm/model/alarm.dart';
 import 'package:silksong_alarm/model/news_background_worker/silksong_news_data.dart';
@@ -12,6 +13,12 @@ enum _Keys {
 
 class Persistence {
   static final _prefs = SharedPreferences.getInstance();
+  static late final String appVersion;
+
+  static Future<void> init() async {
+    final info = await PackageInfo.fromPlatform();
+    appVersion = info.version;
+  }
 
   static Future<bool> saveAlarms(final List<Alarm> alarms) async =>
       await (await _prefs).setString(

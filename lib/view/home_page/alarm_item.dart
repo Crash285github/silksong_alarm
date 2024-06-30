@@ -22,7 +22,7 @@ class _AlarmItemState extends State<AlarmItem> {
   final key = UniqueKey();
 
   String get timeLeft {
-    final difference = widget.alarm.nextDateTime.difference(DateTime.now());
+    final difference = widget.alarm.dateTime.difference(DateTime.now());
 
     final days = difference.inDays;
     if (days > 1) return "in $days days";

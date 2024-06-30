@@ -36,9 +36,12 @@ class Alarm {
     final DateTime dateTime,
   ) {
     final now = DateTime.now();
-    if (dateTime.isAfter(now)) return dateTime;
 
-    if (days.isEmpty) return dateTime.add(const Duration(days: 1));
+    if (days.isEmpty) {
+      if (dateTime.isAfter(now)) return dateTime;
+
+      return dateTime.add(const Duration(days: 1));
+    }
 
     final dayNow = now.weekday;
 
