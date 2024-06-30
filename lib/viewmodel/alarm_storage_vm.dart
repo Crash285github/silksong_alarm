@@ -5,6 +5,7 @@ import 'package:silksong_alarm/model/alarm_storage.dart';
 class AlarmStorageVM extends ChangeNotifier {
   List<Alarm> get alarms => AlarmStorage.alarms;
 
+  /// Adds a new [Alarm] to the [AlarmStorage]
   Future<bool> add(final Alarm alarm) async {
     final added = await AlarmStorage.add(alarm);
 
@@ -12,6 +13,7 @@ class AlarmStorageVM extends ChangeNotifier {
     return added;
   }
 
+  /// Completely removes an [Alarm] from the [AlarmStorage]
   Future<bool> remove(final Alarm alarm) async {
     final removed = await AlarmStorage.remove(alarm);
 
@@ -19,16 +21,19 @@ class AlarmStorageVM extends ChangeNotifier {
     return removed;
   }
 
+  /// Replaces [AlarmStorage.alarms] with the given list
   void replace(final List<Alarm> alarms) {
     AlarmStorage.replace(alarms);
     notifyListeners();
   }
 
+  /// Stops the given alarms and reschedules it to next time
   Future<bool> stop(final Alarm alarm) async {
     final removed = await AlarmStorage.remove(alarm);
 
+    bool added = true;
     if (alarm.repeating) {
-      await AlarmStorage.add(
+      added = await AlarmStorage.add(
         Alarm(
           days: alarm.days,
           settings: alarm.settings.copyWith(
@@ -39,8 +44,7 @@ class AlarmStorageVM extends ChangeNotifier {
     }
 
     notifyListeners();
-
-    return removed;
+    return removed && added;
   }
 
   //_ Singleton

@@ -27,7 +27,7 @@ class _SetVolumeState extends State<_SetVolume> {
   }
 
   Future<void> setupAudioPlayer() async {
-    await _player.setFilePath(await SilksongNews.path);
+    await _player.setFilePath(SilksongNews.path);
     await _player.load();
     systemVolumeAtInit = await VolumeController().getVolume();
     widget.onChanged?.call(localValue);

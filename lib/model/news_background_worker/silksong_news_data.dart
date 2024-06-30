@@ -1,19 +1,27 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
+/// A data class containing the latest saved Daily Silksong News data
 class SilksongNewsData {
+  /// The id of the latest Silksong News Video
   final String id;
+
+  /// The title of the latest Silksong News Video
   final String title;
+
+  /// The description of the latest Silksong News Video
   final String description;
+
+  /// The length of the latest Silksong News Video in seconds
   final int seconds;
 
-  SilksongNewsData({
+  const SilksongNewsData({
     required this.id,
     required this.title,
     required this.description,
     required this.seconds,
   });
 
+  /// Converts `this` [SilksongNewsData] into a `Map` object
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'id': id,
@@ -23,6 +31,7 @@ class SilksongNewsData {
     };
   }
 
+  /// Converts a valid `Map` object into a [SilksongNewsData] object
   factory SilksongNewsData.fromMap(Map<String, dynamic> map) {
     return SilksongNewsData(
       id: map['id'] as String,
@@ -32,8 +41,10 @@ class SilksongNewsData {
     );
   }
 
+  /// Converts `this` [SilksongNewsData] into a `json` [String]
   String toJson() => json.encode(toMap());
 
+  /// Converts a valid `json` [String] into a [SilksongNewsData] object
   factory SilksongNewsData.fromJson(String source) =>
       SilksongNewsData.fromMap(json.decode(source) as Map<String, dynamic>);
 

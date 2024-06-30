@@ -11,8 +11,17 @@ import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 class SilksongNews {
   static final _yt = YoutubeExplode();
 
+  static late final String _appCacheDir;
+
+  /// Initializes the [SilksongNews] fetcher:
+  /// - downloads the latest news (doesnt download if already downloaded)
+  /// - finds the application cache directory
+  /// - Configures the background worker to run every 2 hours and check for
+  /// Silksong news
   static Future<void> init() async {
     download();
+
+    _appCacheDir = (await getApplicationCacheDirectory()).path;
 
     await BackgroundFetch.configure(
       BackgroundFetchConfig(
@@ -27,14 +36,17 @@ class SilksongNews {
       () {},
       (String taskId) async => await BackgroundFetch.finish(taskId),
     );
-
     await BackgroundFetch.registerHeadlessTask(_headless);
-
     await BackgroundFetch.stop();
-
     await BackgroundFetch.start();
   }
 
+  /// The path the Silksong news was saved into
+  static String get path => "$_appCacheDir/alarm.mp3 ";
+
+  /// The background worker method that downloads the latest news
+  ///
+  /// Annotation required for background worker methods
   @pragma('vm:entry-point')
   static _headless(HeadlessTask task) async {
     if (task.timeout) {
@@ -47,9 +59,15 @@ class SilksongNews {
     await BackgroundFetch.finish(task.taskId);
   }
 
-  static Future<String> get path async =>
-      "${(await getApplicationCacheDirectory()).path}/alarm.mp3 ";
-
+  /// Downloads the latest news, unless it has already been downloaded
+  ///
+  /// Return an enum:
+  /// - [DownloadResponse.downloaded] : a new Daily News has been downloaded
+  /// - [DownloadResponse.alreadyHave] : the newsed Daily News has already
+  /// been downloaded and wont be downloaded again
+  /// - [DownloadResponse.failed] : the download failed
+  ///
+  /// Annotation required for background worker methods
   @pragma('vm:entry-point')
   static Future<DownloadResponse> download() async {
     try {
@@ -78,7 +96,7 @@ class SilksongNews {
 
       final audioStream = _yt.videos.streamsClient.get(audioStreamInfo);
 
-      final audioFileStream = File(await path).openWrite();
+      final audioFileStream = File(path).openWrite();
 
       await audioStream.pipe(audioFileStream);
       await audioFileStream.flush();
@@ -91,6 +109,7 @@ class SilksongNews {
   }
 }
 
+/// An enum for the return values of [SilksongNews.download]
 enum DownloadResponse {
   failed("Failed"),
   downloaded("Downloaded"),

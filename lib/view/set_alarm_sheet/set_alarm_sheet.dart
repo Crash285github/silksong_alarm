@@ -89,7 +89,7 @@ class _AlarmSetterBottomSheetState extends State<_AlarmSetterBottomSheet> {
         settings: AlarmSettings(
           id: DateTime.now().millisecondsSinceEpoch % 100000,
           dateTime: nextDate,
-          assetAudioPath: await SilksongNews.path,
+          assetAudioPath: SilksongNews.path,
           notificationTitle: newsData?.title ?? "Your Daily Silksong Alarm",
           notificationBody: newsData?.description ?? "There has been... ???",
           androidFullScreenIntent: true,
