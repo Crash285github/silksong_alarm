@@ -74,14 +74,38 @@ class _AlarmItemState extends State<AlarmItem> {
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        timeLeft,
-                        style: TextStyle(
-                          fontSize: 16,
+                      Expanded(
+                        flex: 2,
+                        child: Text(
+                          timeLeft,
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Theme.of(context)
+                                .colorScheme
+                                .primary
+                                .withOpacity(.5),
+                          ),
+                        ),
+                      ),
+                      const Spacer(),
+                      Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: Icon(
+                          Icons.loop,
                           color: Theme.of(context)
                               .colorScheme
                               .primary
-                              .withOpacity(.5),
+                              .withOpacity(widget.alarm.looping ? 1 : .2),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: Icon(
+                          Icons.vibration,
+                          color: Theme.of(context)
+                              .colorScheme
+                              .primary
+                              .withOpacity(widget.alarm.vibrating ? 1 : .2),
                         ),
                       ),
                       const Spacer(),

@@ -28,6 +28,8 @@ class Alarm {
   AlarmSettings get settings => _settings;
 
   bool get repeating => _days.isNotEmpty;
+  bool get vibrating => _settings.vibrate;
+  bool get looping => _settings.loopAudio;
 
   static DateTime getNextDateTime(
     final List<int> days,
@@ -35,6 +37,8 @@ class Alarm {
   ) {
     final now = DateTime.now();
     if (dateTime.isAfter(now)) return dateTime;
+
+    if (days.isEmpty) return dateTime.add(const Duration(days: 1));
 
     final dayNow = now.weekday;
 

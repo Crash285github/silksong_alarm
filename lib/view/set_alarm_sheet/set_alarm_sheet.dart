@@ -18,7 +18,9 @@ import 'package:silksong_alarm/viewmodel/alarm_storage_vm.dart';
 part 'backdrop_gradient.dart';
 part 'days_selector.dart';
 part 'set_btn.dart';
+part 'set_loop.dart';
 part 'set_time.dart';
+part 'set_vibration.dart';
 part 'set_volume.dart';
 
 Future<void> showSetAlarmBottomSheet(BuildContext context) async {
@@ -45,9 +47,11 @@ class _AlarmSetterBottomSheet extends StatefulWidget {
 }
 
 class _AlarmSetterBottomSheetState extends State<_AlarmSetterBottomSheet> {
+  final Set<int> days = {};
   DateTime dateTime = DateTime.now().copyWith(second: 0);
   double volume = .5;
-  final Set<int> days = {};
+  bool loop = false;
+  bool vibrate = true;
 
   Future<void> _setTime() async {
     final selected = await showTimePicker(
@@ -90,9 +94,9 @@ class _AlarmSetterBottomSheetState extends State<_AlarmSetterBottomSheet> {
           notificationBody: newsData?.description ?? "There has been... ???",
           androidFullScreenIntent: true,
           enableNotificationOnKill: true,
-          loopAudio: false,
+          loopAudio: loop,
           fadeDuration: 0,
-          vibrate: true,
+          vibrate: vibrate,
           volume: volume,
         ),
       ),
@@ -118,9 +122,28 @@ class _AlarmSetterBottomSheetState extends State<_AlarmSetterBottomSheet> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   _DaysSelector(days),
-                  _SetTime(
-                    dateTime: dateTime,
-                    onTap: _setTime,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 16.0,
+                      horizontal: 8.0,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        _SetVibration(
+                          vibrate: vibrate,
+                          onTap: () => setState(() => vibrate = !vibrate),
+                        ),
+                        _SetTime(
+                          dateTime: dateTime,
+                          onTap: _setTime,
+                        ),
+                        _SetLoop(
+                          loop: loop,
+                          onTap: () => setState(() => loop = !loop),
+                        ),
+                      ],
+                    ),
                   ),
                   _SetVolume(
                     onChanged: (value) {
