@@ -112,7 +112,13 @@ class _RingPageState extends State<RingPage> {
                               .tertiary
                               .withOpacity(.2),
                         ),
-                        onTap: () {},
+                        onTap: () async {
+                          await AlarmStorageVM().snooze(widget.alarm);
+
+                          if (context.mounted) {
+                            Navigator.pop(context);
+                          }
+                        },
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Center(
