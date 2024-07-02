@@ -47,6 +47,25 @@ class AlarmStorageVM extends ChangeNotifier {
     return removed && added;
   }
 
+  /// Snoozes the given alarm for 5 minutes
+  ///
+  /// If the alarm is repeating, it will be rescheduled to the next time
+  Future<bool> snooze(final Alarm alarm) async {
+    final stopped = await stop(alarm);
+
+    final snoozed = await AlarmStorage.add(
+      Alarm(
+        days: {},
+        settings: alarm.settings.copyWith(
+          dateTime: DateTime.now().add(const Duration(minutes: 5)),
+        ),
+      ),
+    );
+
+    notifyListeners();
+    return stopped && snoozed;
+  }
+
   //_ Singleton
   static final _viewModel = AlarmStorageVM._internal();
   factory AlarmStorageVM() => _viewModel;
