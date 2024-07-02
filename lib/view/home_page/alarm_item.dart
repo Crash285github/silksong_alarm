@@ -75,7 +75,6 @@ class _AlarmItemState extends State<AlarmItem> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Expanded(
-                        flex: 2,
                         child: Text(
                           timeLeft,
                           style: TextStyle(
@@ -87,7 +86,6 @@ class _AlarmItemState extends State<AlarmItem> {
                           ),
                         ),
                       ),
-                      const Spacer(),
                       Padding(
                         padding: const EdgeInsets.all(4.0),
                         child: Icon(
@@ -108,12 +106,27 @@ class _AlarmItemState extends State<AlarmItem> {
                               .withOpacity(widget.alarm.vibrating ? 1 : .2),
                         ),
                       ),
-                      const Spacer(),
-                      Text(
-                        DateFormat("HH:mm").format(widget.alarm.dateTime),
-                        style: TextStyle(
-                          fontSize: 32,
-                          color: Theme.of(context).colorScheme.primary,
+                      Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: Text(
+                          "${(widget.alarm.volume * 100) ~/ 1}%",
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Theme.of(context)
+                                .colorScheme
+                                .primary
+                                .withOpacity(.7),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8.0),
+                        child: Text(
+                          DateFormat("HH:mm").format(widget.alarm.dateTime),
+                          style: TextStyle(
+                            fontSize: 32,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
                         ),
                       ),
                     ],
