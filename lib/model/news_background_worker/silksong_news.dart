@@ -42,7 +42,7 @@ class SilksongNews {
   }
 
   /// The path the Silksong news was saved into
-  static String get path => "$_appCacheDir/alarm.mp3 ";
+  static String get path => "$_appCacheDir/alarm.mp3";
 
   /// The background worker method that downloads the latest news
   ///
