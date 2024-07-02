@@ -12,7 +12,7 @@ class _SetVolume extends StatefulWidget {
 
 class _SetVolumeState extends State<_SetVolume> {
   double? systemVolumeAtInit;
-  double localValue = 0;
+  double localValue = .75;
   bool playing = false;
   final AudioPlayer _player = AudioPlayer();
 
@@ -29,9 +29,15 @@ class _SetVolumeState extends State<_SetVolume> {
   Future<void> setupAudioPlayer() async {
     await _player.setFilePath(SilksongNews.path);
     await _player.load();
+
     systemVolumeAtInit = await VolumeController().getVolume();
+    if (systemVolumeAtInit == null || systemVolumeAtInit! < .75) {
+      VolumeController().setVolume(.75, showSystemUI: false);
+    }
+
+    setState(() => localValue = max(.75, systemVolumeAtInit ?? .75));
+
     widget.onChanged?.call(localValue);
-    setState(() => localValue = systemVolumeAtInit!);
   }
 
   @override
