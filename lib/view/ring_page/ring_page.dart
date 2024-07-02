@@ -18,10 +18,14 @@ class RingPage extends StatefulWidget {
 
 class _RingPageState extends State<RingPage> {
   SilksongNewsData? data;
+  int begin = 0;
 
   @override
   void initState() {
     super.initState();
+
+    begin = DateTime.now().difference(widget.alarm.dateTime).inSeconds;
+
     Persistence.getSilksongNewsData().then(
       (value) => setState(() => data = value),
     );
@@ -65,9 +69,10 @@ class _RingPageState extends State<RingPage> {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       child: TweenAnimationBuilder<double>(
-                        duration: Duration(seconds: data?.seconds ?? 0),
+                        duration:
+                            Duration(seconds: (data?.seconds ?? 0) - begin),
                         tween: Tween<double>(
-                          begin: 0,
+                          begin: begin.toDouble(),
                           end: data?.seconds.toDouble() ?? 0.0,
                         ),
                         builder: (context, value, child) => BeveledCard(
