@@ -37,6 +37,7 @@ class AlarmStorageVM extends ChangeNotifier {
         Alarm(
           days: alarm.days,
           settings: alarm.settings.copyWith(
+            id: DateTime.now().millisecondsSinceEpoch % 100000,
             dateTime: alarm.nextDateTime,
           ),
         ),
@@ -57,7 +58,14 @@ class AlarmStorageVM extends ChangeNotifier {
       Alarm(
         days: {},
         settings: alarm.settings.copyWith(
-          dateTime: DateTime.now().add(const Duration(minutes: 5)),
+          id: DateTime.now().millisecondsSinceEpoch % 100000,
+          dateTime: DateTime.now()
+              .copyWith(
+                second: 0,
+                millisecond: 0,
+                microsecond: 0,
+              )
+              .add(const Duration(minutes: 5)),
         ),
       ),
     );

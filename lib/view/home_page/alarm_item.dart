@@ -56,10 +56,10 @@ class _AlarmItemState extends State<AlarmItem> {
         ),
         child: BeveledCard(
           borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(32),
+            topLeft: Radius.circular(16),
             topRight: Radius.circular(8),
             bottomRight: Radius.circular(32),
-            bottomLeft: Radius.circular(8),
+            bottomLeft: Radius.circular(16),
           ),
           child: Padding(
             padding: const EdgeInsets.symmetric(

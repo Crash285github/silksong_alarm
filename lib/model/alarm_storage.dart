@@ -37,7 +37,7 @@ class AlarmStorage {
     if (res) {
       _alarms.remove(alarm);
 
-      Persistence.saveAlarms(alarms);
+      Persistence.saveAlarms(_alarms);
     }
 
     return res;

@@ -54,24 +54,37 @@ class Alarm {
     final List<int> days,
     final DateTime dateTime,
   ) {
-    final now = DateTime.now();
+    final now = DateTime.now().copyWith(
+      second: 0,
+      millisecond: 0,
+      microsecond: 0,
+    );
+
+    if (dateTime.isAfter(now.add(const Duration(minutes: 1)))) {
+      return dateTime;
+    }
 
     if (days.isEmpty) {
-      if (dateTime.isAfter(now)) return dateTime;
-
       return dateTime.add(const Duration(days: 1));
     }
 
-    final dayNow = now.weekday;
+    final today = now.weekday - 1;
 
-    days.sort();
+    for (var i = 1; i <= 7; i++) {
+      final day = (today + i) % 7;
 
-    final nextDay =
-        days.where((final day) => day > dayNow).firstOrNull ?? days[0];
+      if (days.contains(day)) {
+        final next = dateTime.add(Duration(days: i));
 
-    final diff = ((nextDay - dayNow) % 7) + 1;
+        if (next.isAfter(now.add(const Duration(minutes: 1)))) {
+          return next;
+        }
 
-    return dateTime.add(Duration(days: diff));
+        return next.add(const Duration(days: 7));
+      }
+    }
+
+    throw Exception("Couldn't find next date");
   }
 
   /// Returns the next time `this` [Alarm] will ring
