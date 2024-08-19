@@ -75,13 +75,17 @@ class _AlarmSetterBottomSheetState extends State<_AlarmSetterBottomSheet> {
         time = time.add(const Duration(days: 1));
       }
 
-      setState(() => dateTime = time);
+      setState(
+        () => dateTime = dateTime.copyWith(
+          hour: time.hour,
+          minute: time.minute,
+        ),
+      );
     }
   }
 
   Future<void> _setAlarm() async {
-    final newsData = await Persistence.getSilksongNewsData();
-
+    final newsData = Persistence.getSilksongNewsData();
     final nextDate = Alarm.getNextDateTime(days.toList(), dateTime);
 
     await AlarmStorageVM().add(
@@ -122,7 +126,13 @@ class _AlarmSetterBottomSheetState extends State<_AlarmSetterBottomSheet> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  _DaysSelector(days),
+                  _DaysSelector(
+                    (selected) => setState(
+                      () => days
+                        ..clear()
+                        ..addAll(selected),
+                    ),
+                  ),
                   Padding(
                     padding: const EdgeInsets.symmetric(
                       vertical: 16.0,
@@ -144,6 +154,15 @@ class _AlarmSetterBottomSheetState extends State<_AlarmSetterBottomSheet> {
                           onTap: () => setState(() => loop = !loop),
                         ),
                       ],
+                    ),
+                  ),
+                  Text(
+                    DateFormat("yyyy. MMM. dd. HH:mm (E)").format(
+                      Alarm.getNextDateTime(days.toList(), dateTime),
+                    ),
+                    style: TextStyle(
+                      color:
+                          Theme.of(context).colorScheme.primary.withOpacity(.3),
                     ),
                   ),
                   _SetVolume(

@@ -3,7 +3,7 @@ part of '../home_page.dart';
 class SettingsDrawer extends StatelessWidget {
   const SettingsDrawer({super.key});
 
-  Future<void> _autoStart() async => await getAutoStartPermission();
+  // Future<void> _autoStart() async => await getAutoStartPermission();
 
   Future<void> _checkAlarmPerms(BuildContext context) async {
     final res = await checkAndroidScheduleExactAlarmPermission();
@@ -58,7 +58,8 @@ class SettingsDrawer extends StatelessWidget {
                       SettingTemplate(
                         text: "Auto Start",
                         icon: Icons.run_circle_outlined,
-                        onTap: _autoStart,
+                        // onTap: _autoStart,
+                        onTap: () {},
                       ),
                       SettingTemplate(
                         onTap: () => _checkAlarmPerms(context),
@@ -75,6 +76,17 @@ class SettingsDrawer extends StatelessWidget {
                         text: "Download latest news",
                         icon: Icons.download_done_outlined,
                       ),
+                      FittedBox(
+                        child: Text(
+                          Persistence.getSilksongNewsData()?.title ?? "",
+                          style: TextStyle(
+                            color: Theme.of(context)
+                                .colorScheme
+                                .primary
+                                .withOpacity(.2),
+                          ),
+                        ),
+                      ),
                       const Spacer(),
                       Center(
                         child: Padding(
@@ -87,7 +99,7 @@ class SettingsDrawer extends StatelessWidget {
                                 .copyWith(
                                   color: Theme.of(context)
                                       .colorScheme
-                                      .onBackground
+                                      .onSurface
                                       .withOpacity(.3),
                                 ),
                           ),

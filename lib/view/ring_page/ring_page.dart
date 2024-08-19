@@ -26,9 +26,7 @@ class _RingPageState extends State<RingPage> {
 
     begin = DateTime.now().difference(widget.alarm.dateTime).inSeconds;
 
-    Persistence.getSilksongNewsData().then(
-      (value) => setState(() => data = value),
-    );
+    setState(() => data = Persistence.getSilksongNewsData());
   }
 
   String get formattedDuration {
@@ -106,7 +104,7 @@ class _RingPageState extends State<RingPage> {
                       ),
                       clipBehavior: Clip.antiAlias,
                       child: InkWell(
-                        overlayColor: MaterialStatePropertyAll(
+                        overlayColor: WidgetStatePropertyAll(
                           Theme.of(context)
                               .colorScheme
                               .tertiary

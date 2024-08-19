@@ -9,11 +9,11 @@ import 'view/home_page/home_page.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  await Persistence.init();
 
   SilksongNews.init();
 
   await Alarm.init();
-  await Persistence.init();
 
   runApp(const SilksongAlarmApp());
 }

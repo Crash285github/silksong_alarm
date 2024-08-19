@@ -1,14 +1,16 @@
 part of 'set_alarm_sheet.dart';
 
 class _DaysSelector extends StatefulWidget {
-  final Set<int> days;
-  const _DaysSelector(this.days);
+  final Function(Set<int> days) onSelect;
+  const _DaysSelector(this.onSelect);
 
   @override
   State<_DaysSelector> createState() => _DaysSelectorState();
 }
 
 class _DaysSelectorState extends State<_DaysSelector> {
+  final Set<int> _days = {};
+
   bool isToday(int day) => day == DateTime.now().weekday - 1;
 
   @override
@@ -23,19 +25,25 @@ class _DaysSelectorState extends State<_DaysSelector> {
                 aspectRatio: 1,
                 child: BeveledCard(
                   borderRadius: BorderRadius.circular(512),
-                  color: Theme.of(context).colorScheme.tertiary,
+                  color: day.index >= 5
+                      ? Theme.of(context).colorScheme.primary
+                      : Theme.of(context).colorScheme.tertiary,
                   borderWidth: .5,
                   onTap: () {
                     setState(() {
-                      if (!widget.days.add(day.index)) {
-                        widget.days.remove(day.index);
+                      if (!_days.add(day.index)) {
+                        _days.remove(day.index);
                       }
                     });
+
+                    widget.onSelect(_days);
                   },
                   child: ImageFiltered(
                     imageFilter: ColorFilter.mode(
-                      widget.days.contains(day.index)
-                          ? Theme.of(context).colorScheme.tertiary
+                      _days.contains(day.index)
+                          ? day.index >= 5
+                              ? Theme.of(context).colorScheme.primary
+                              : Theme.of(context).colorScheme.tertiary
                           : Colors.transparent,
                       BlendMode.difference,
                     ),
@@ -43,7 +51,7 @@ class _DaysSelectorState extends State<_DaysSelector> {
                       child: Text(
                         day.name[0].toUpperCase(),
                         style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                              color: isToday(day.index)
+                              color: day.index >= 5
                                   ? Theme.of(context).colorScheme.primary
                                   : Theme.of(context).colorScheme.tertiary,
                             ),

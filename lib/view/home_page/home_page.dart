@@ -5,7 +5,7 @@ import 'dart:ui';
 
 import 'package:alarm/alarm.dart' as pckg;
 import 'package:alarm/model/alarm_settings.dart';
-import 'package:auto_start_flutter/auto_start_flutter.dart';
+// import 'package:auto_start_flutter/auto_start_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:silksong_alarm/fading_scrollables/fading_scrollables.dart';
 
@@ -14,7 +14,7 @@ import 'package:silksong_alarm/services/permissions.dart';
 import 'package:silksong_alarm/model/news_background_worker/silksong_news.dart';
 import 'package:silksong_alarm/view/home_page/alarm_list.dart';
 import 'package:silksong_alarm/view/ring_page/ring_page.dart';
-import 'package:silksong_alarm/view/set_alarm_sheet/set_alarm_sheet.dart';
+import 'package:silksong_alarm/view/home_page/set_alarm_sheet/set_alarm_sheet.dart';
 import 'package:silksong_alarm/view/widget/beveled_card.dart';
 import 'package:silksong_alarm/view/widget/popup.dart.dart';
 import 'package:silksong_alarm/viewmodel/alarm_storage_vm.dart';
@@ -44,12 +44,10 @@ class _HomePageState extends State<HomePage> {
     checkAndroidNotificationPermission();
     checkAndroidScheduleExactAlarmPermission();
 
-    Persistence.loadAlarms().then(
-      (alarms) {
-        WidgetsBinding.instance.addPostFrameCallback(
-          (_) => AlarmStorageVM().replace(alarms ?? []),
-        );
-      },
+    final alarms = Persistence.loadAlarms();
+
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) => AlarmStorageVM().replace(alarms ?? []),
     );
 
     _scrollController.addListener(() {
@@ -68,7 +66,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _navigateToRingScreen(final AlarmSettings settigns) async {
-    final alarms = await Persistence.loadAlarms();
+    final alarms = Persistence.loadAlarms();
     AlarmStorageVM().replace(alarms ?? []);
 
     final alarm = AlarmStorageVM()
